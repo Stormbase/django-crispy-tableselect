@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "django-tableselect"
+version = "0.1.0"
+description = "Form field for selecting rows in a table"
+authors = ["Storm Heg <storm@stormbase.digital>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/technonomydev/django-tableselect"
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "License :: Other/Proprietary License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+packages = [
+    { include = "techonomy", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = ">=3.2,<5.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "~4.0"
+flake8-black = "^0.3.5"
+flake8-isort =  "~4.1"
+isort = "~5.10"
+black = "~22"
+pytest = "~7"
+pytest-django = "~4.5"
+pytest-cov = "~4.0"
+pytest-env = "^0.6.2"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+metadata = true
+tagged-metadata = true
+latest-tag = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+--extend-exclude= "/migrations/"
+
+[tool.isort]
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 88
+skip = "migrations"
+multi_line_output = 3
+use_parentheses = true
+
+[tool.pytest.ini_options]
+pythonpath = "sandbox"
+DJANGO_SETTINGS_MODULE = "settings"
+testpaths = "tests/"
+addopts = "--reuse-db --cov=techonomy"
+
+[tool.coverage.run]
+omit = ["**/migrations/**", "**/tests/**", "sandbox/**"]
+
+[tool.coverage.report]
+show_missing = true

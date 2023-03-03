@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+defaults:
+  run:
+    working-directory: ./src
+
+jobs:
+  linting-and-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.9]
+        django-version: [3.2, 4.2]
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          path: ./src
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+           python-version: '${{ matrix.python-version }}'
+      - name: Install python dependencies
+        run: |
+          pip install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
+          make install
+      - name: Install matrix specific dependencies
+        run: |
+          source $(poetry env info --path)/bin/activate
+          pip install "Django~=${{ matrix.django-version }}.0"
+          pip list
+      - name: Lint with flake8 (black and isort)
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make lint
+      - name: Run the testsuite
+        run: |
+          source $(poetry env info --path)/bin/activate
+          make test

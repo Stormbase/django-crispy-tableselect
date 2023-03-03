@@ -1,0 +1,15 @@
+# Code
+.idea/
+.vscode/
+
+# OSX
+.DS_Store
+
+# Python
+__pycache__/
+*.egg-info/
+*.pyc
+.coverage
+
+# Virtual env
+venv/
