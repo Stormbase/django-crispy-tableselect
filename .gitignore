@@ -13,3 +13,6 @@ __pycache__/
 
 # Virtual env
 venv/
+
+# Sandbox files
+db.sqlite3

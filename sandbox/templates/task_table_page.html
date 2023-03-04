@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+
+{% block title %}Task table{% endblock title %}
+
+{% block content %}
+    <h1>Task table</h1>
+    {% render_table table %}
+{% endblock content %}
