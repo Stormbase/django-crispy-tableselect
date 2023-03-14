@@ -1,4 +1,4 @@
 from django.urls import path
-from tasks.views import TaskTableView
+from tasks import views
 
-urlpatterns = ([path("table/", TaskTableView.as_view(), name="table")], "tasks")
+urlpatterns = ([path("table/", views.TaskTableView.as_view(), name="table"), path("bulk/", views.BulkCompleteTaskView.as_view(), name="bulk-complete")], "tasks")

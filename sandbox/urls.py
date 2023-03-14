@@ -9,5 +9,5 @@ from tasks.urls import urlpatterns as tasks_urlpatterns
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("tasks/", include(tasks_urlpatterns, namespace="tasks")),
-    path("", RedirectView.as_view(url=reverse_lazy('tasks:table'))),
+    path("", RedirectView.as_view(url=reverse_lazy('tasks:bulk-complete'))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

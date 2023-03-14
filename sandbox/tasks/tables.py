@@ -8,6 +8,7 @@ class TaskTable(tables.Table):
 
     class Meta:
         model = Task
+        # sequence = ("date_added", "name")
         fields = (
             "name",
             "date_added",

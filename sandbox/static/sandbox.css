@@ -32,7 +32,7 @@ th {
     text-align: inherit;
 }
 
-th > a {
+th, th > a {
     color: #efefef;
     text-decoration: none;
 }

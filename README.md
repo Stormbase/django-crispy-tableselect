@@ -1,7 +1,11 @@
 # Django TableSelect
 [![CI](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml/badge.svg)](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml)
 
-Form field for selecting rows in a table
+Form widget for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
+
+<center>
+    <img width="900" src="./docs/images/screenshot.png" alt="Screenshot of a form that allows selecting tasks in a table.">
+</center>
 
 ## Development setup
 
