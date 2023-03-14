@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title %}Bulk complete tasks{% endblock title %}
+
+{% block content %}
+    <h1>Mark tasks as complete</h1>
+    {% crispy form %}
+{% endblock content %}

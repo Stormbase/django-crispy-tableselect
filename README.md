@@ -1,7 +1,21 @@
 # Django TableSelect
 [![CI](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml/badge.svg)](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml)
 
-Form field for selecting rows in a table
+*Note:* this package is under heavy development and currently in proof-of-concept phase.
+
+Form widget for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
+
+<center>
+    <img width="900" src="./docs/images/screenshot.png" alt="Screenshot of a form that allows selecting tasks in a table.">
+</center>
+
+## Todo list
+
+- [ ] Write documentation (d'oh)
+- [ ] Publish to PyPI
+- [ ] Add checkbox in table header to select/de-select all rows at once.
+- [ ] Add tests
+- [ ] Audit accessibility
 
 ## Development setup
 
