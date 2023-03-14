@@ -57,7 +57,7 @@
     "model": "tasks.task",
     "pk": 7,
     "fields": {
-      "name": "Stargazing",
+      "name": "Stargaze until dawn",
       "date_added": "2023-01-30",
       "date_completed": null
     }
