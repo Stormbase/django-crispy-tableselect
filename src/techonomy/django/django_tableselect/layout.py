@@ -53,7 +53,7 @@ class TableSelect(layout.TemplateNameMixin):
             self._set_row_value(row, "_selected", selected)
         return table_data
 
-    def _construct_sequence(self, input_name):
+    def _construct_sequence(self, column_name):
         table_kwargs = self.table_kwargs.copy()
         kwarg_sequence = table_kwargs.pop("sequence", ())
         meta_sequence = ()
@@ -65,15 +65,15 @@ class TableSelect(layout.TemplateNameMixin):
         original_sequence = kwarg_sequence or meta_sequence
 
         # Reconstruct the sequence with the checkbox column at the start
-        return (input_name, *original_sequence)
+        return (column_name, *original_sequence)
 
-    def get_table(self, values):
-        input_name = self.name
+    def get_table(self, input_name, values):
+        column_name = self.name
         table_kwargs = self.table_kwargs.copy()
 
         extra_columns = [
             (
-                input_name,
+                column_name,
                 CheckBoxColumn(
                     verbose_name="",
                     checked=lambda _, r: r.get("_selected"),
@@ -83,7 +83,7 @@ class TableSelect(layout.TemplateNameMixin):
             )
         ]
         extra_columns.extend(table_kwargs.pop("extra_columns", []))
-        sequence = self._construct_sequence(input_name)
+        sequence = self._construct_sequence(column_name)
 
         return self.table_class(
             # This table may never be ordered
@@ -98,5 +98,6 @@ class TableSelect(layout.TemplateNameMixin):
         template = self.get_template_name(template_pack)
         bound_field = form[self.name]
         values = bound_field.field.widget.format_value(bound_field.value())
-        context.update({"table": self.get_table(values)})
+        html_name = bound_field.html_name
+        context.update({"table": self.get_table(html_name, values)})
         return render_to_string(template, context.flatten())
