@@ -25,6 +25,7 @@ class BulkCompleteTaskForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["select_tasks"].choices = self.get_task_choices(tasks)
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             Field("date_completed"),
             TableSelect("select_tasks", table_class=TaskTable, table_data=tasks),

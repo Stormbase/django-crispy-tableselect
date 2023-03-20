@@ -7,5 +7,10 @@
 
 {% block content %}
     <h1>Mark tasks as complete</h1>
-    {% crispy form %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {% crispy wizard.form %}
+    </form>
 {% endblock content %}
