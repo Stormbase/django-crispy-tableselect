@@ -30,27 +30,18 @@ class TableSelect(layout.TemplateNameMixin):
         self.table_data = table_data
         self.table_kwargs = table_kwargs
 
-    def _set_row_value(self, row, key, value):
-        """Sets a value on the row, supports dicts and objects."""
-        if isinstance(row, dict):
-            row[key] = value
-            return
-
-        if isinstance(row, object):
-            setattr(row, key, value)
-
-    def prepare_table_data(self, table_data, values):
+    def prepare_table_data(self, table_data):
         """Prepare table data with values necessary for the select checkbox."""
 
         for row in table_data:
+            key = self.name
             value = self.helper.get_value(row)
 
-            # Set the value of the checkbox
-            self._set_row_value(row, self.name, value)
+            if isinstance(row, dict):
+                row[key] = value
+            else:
+                setattr(row, key, value)
 
-            # Set the checked state of the checkbox
-            selected = str(value) in values
-            self._set_row_value(row, "_selected", selected)
         return table_data
 
     def _construct_sequence(self, column_name):
@@ -67,7 +58,7 @@ class TableSelect(layout.TemplateNameMixin):
         # Reconstruct the sequence with the checkbox column at the start
         return (column_name, *original_sequence)
 
-    def get_table(self, input_name, values):
+    def get_table(self, input_name, selected_values):
         column_name = self.name
         table_kwargs = self.table_kwargs.copy()
 
@@ -76,9 +67,9 @@ class TableSelect(layout.TemplateNameMixin):
                 column_name,
                 CheckBoxColumn(
                     verbose_name="",
-                    checked=lambda _, r: r.get("_selected"),
                     input_name=input_name,
                     helper=self.helper,
+                    selected_values=selected_values,
                 ),
             )
         ]
@@ -88,7 +79,7 @@ class TableSelect(layout.TemplateNameMixin):
         return self.table_class(
             # This table may never be ordered
             orderable=False,
-            data=self.prepare_table_data(self.table_data, values),
+            data=self.prepare_table_data(self.table_data),
             sequence=sequence,
             extra_columns=extra_columns,
             **table_kwargs,
@@ -97,7 +88,9 @@ class TableSelect(layout.TemplateNameMixin):
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         template = self.get_template_name(template_pack)
         bound_field = form[self.name]
-        values = bound_field.field.widget.format_value(bound_field.value())
+
+        # Waarom hier niet gewoon bound_field.value()
+        selected_values = bound_field.field.widget.format_value(bound_field.value())
         html_name = bound_field.html_name
-        context.update({"table": self.get_table(html_name, values)})
+        context.update({"table": self.get_table(html_name, selected_values)})
         return render_to_string(template, context.flatten())
