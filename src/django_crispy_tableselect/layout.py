@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 
 class TableSelect(layout.TemplateNameMixin):
-    template = "django_tableselect/table_select.html"
+    template = "django_crispy_tableselect/table_select.html"
 
     def __init__(
         self,

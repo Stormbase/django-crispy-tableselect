@@ -17,7 +17,7 @@ class TableSelectHelper:
     value_name = "name"
 
     # Path to javascript static file
-    js_path = "django_tableselect/tableselect.js"
+    js_path = "django_crispy_tableselect/tableselect.js"
 
     def __init__(
         self,

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django_tables2",
     "crispy_forms",
     "crispy_bootstrap5",
-    "techonomy.django.django_tableselect",
+    "django_crispy_tableselect",
     "tasks",
 ]
 

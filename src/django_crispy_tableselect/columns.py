@@ -14,7 +14,7 @@ __all__ = [
 
 
 class CheckBoxColumn(BaseCheckBoxColumn):
-    header_template = "django_tableselect/checkbox_column_header.html"
+    header_template = "django_crispy_tableselect/checkbox_column_header.html"
 
     def __init__(
         self,

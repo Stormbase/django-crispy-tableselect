@@ -1,9 +1,9 @@
-# Django TableSelect
+# Django Crispy TableSelect
 [![CI](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml/badge.svg)](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml)
 
 *Note:* this package is under heavy development and currently in proof-of-concept phase.
 
-Form widget for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
+Crispy layout object for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
 
 <center>
     <img width="900" src="./docs/images/demo.gif" alt="Animation showing a table with rows that are selected all at once and then unchecked one-by-one.">

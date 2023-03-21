@@ -6,8 +6,8 @@ from django.core.exceptions import ValidationError
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
-from techonomy.django.django_tableselect import TableSelect, TableSelectHelper
-from techonomy.django.django_tableselect.mixins import CrispyMediaMixin
+from django_crispy_tableselect import TableSelect, TableSelectHelper, CrispyMediaMixin
+
 
 from .tables import TaskTable
 
