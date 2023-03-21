@@ -17,7 +17,7 @@ lint:
 	flake8 src tests
 
 test:
-	pytest --reuse-db --cov=techonomy
+	pytest --reuse-db --cov=django_crispy_tableselect
 
 format:
 	black src tests

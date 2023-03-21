@@ -4,12 +4,12 @@
   "checkout": null,
   "context": {
     "cookiecutter": {
-      "app_name": "Django TableSelect",
-      "app_slug": "django-tableselect",
+      "app_name": "Django Crispy TableSelect",
+      "app_slug": "django-crispy-tableselect",
       "app_base": "techonomy",
       "app_namespace": "django",
-      "app_dir": "django_tableselect",
-      "app_description": "Form field for selecting rows in a table",
+      "app_dir": "django_crispy_tableselect",
+      "app_description": "Crispy layout object for selecting rows in a table",
       "python_version": "3.9",
       "django_version": "3.2, 4.2",
       "django_version_string": ">=3.2,<5.0",

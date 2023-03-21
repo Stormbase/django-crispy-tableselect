@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "django-tableselect"
+name = "django-crispy-tableselect"
 version = "0.1.0"
-description = "Form field for selecting rows in a table"
+description = "Crispy layout object for selecting rows in a table"
 authors = ["Storm Heg <storm@stormbase.digital>"]
 license = "MIT"
 readme = "README.md"
@@ -18,7 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 packages = [
-    { include = "techonomy", from = "src" },
+    { include = "django_crispy_tableselect", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -68,7 +68,7 @@ use_parentheses = true
 pythonpath = "sandbox"
 DJANGO_SETTINGS_MODULE = "settings"
 testpaths = "tests/"
-addopts = "--reuse-db --cov=techonomy"
+addopts = "--reuse-db --cov=django_crispy_tableselect"
 
 [tool.coverage.run]
 omit = ["**/migrations/**", "**/tests/**", "sandbox/**"]
