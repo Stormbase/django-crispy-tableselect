@@ -10,9 +10,15 @@ __all__ = [
 
 class CheckBoxColumn(BaseCheckBoxColumn):
     def __init__(
-        self, helper: TableSelectHelper, attrs={}, input_name="", checked=None, **extra
+        self,
+        helper: TableSelectHelper,
+        attrs={},
+        input_name="",
+        selected_values=[],
+        **extra
     ):
         self.helper = helper
+        self.selected_values = selected_values
 
         update_attrs = attrs.copy()
 
@@ -24,13 +30,10 @@ class CheckBoxColumn(BaseCheckBoxColumn):
             ),
             **td_input_attrs,
         }
-        super().__init__(update_attrs, checked, **extra)
+        super().__init__(update_attrs, **extra)
 
     def is_checked(self, value, record):
-        if isinstance(record, dict):
-            return record.get("_selected", False)
-
-        return getattr(record, "_selected", False)
+        return str(value) in self.selected_values
 
     @property
     def header(self):
