@@ -1,7 +1,11 @@
-from django.utils.translation import gettext_lazy as _
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django_tables2 import CheckBoxColumn as BaseCheckBoxColumn
 
-from .helpers import TableSelectHelper
+if TYPE_CHECKING:
+    from .helpers import TableSelectHelper
 
 __all__ = [
     "CheckBoxColumn",
@@ -15,7 +19,7 @@ class CheckBoxColumn(BaseCheckBoxColumn):
         attrs={},
         input_name="",
         selected_values=[],
-        **extra
+        **extra,
     ):
         self.helper = helper
         self.selected_values = selected_values

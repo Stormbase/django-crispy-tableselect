@@ -4,7 +4,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django_tables2 import Table
 
-from .columns import CheckBoxColumn
 from .helpers import TableSelectHelper
 
 
@@ -17,7 +16,7 @@ class TableSelect(layout.TemplateNameMixin):
         table_class,
         table_data=[],
         table_kwargs={},
-        helper=TableSelectHelper(),
+        helper_class=TableSelectHelper,
         **kwargs,
     ):
         if not issubclass(table_class, Table):
@@ -25,64 +24,11 @@ class TableSelect(layout.TemplateNameMixin):
             raise ImproperlyConfigured(msg)
 
         self.name = name
-        self.helper = helper
-        self.table_class = table_class
-        self.table_data = table_data
-        self.table_kwargs = table_kwargs
-
-    def prepare_table_data(self, table_data):
-        """Prepare table data with values necessary for the select checkbox."""
-
-        for row in table_data:
-            key = self.name
-            value = self.helper.get_value(row)
-
-            if isinstance(row, dict):
-                row[key] = value
-            else:
-                setattr(row, key, value)
-
-        return table_data
-
-    def _construct_sequence(self, column_name):
-        table_kwargs = self.table_kwargs.copy()
-        kwarg_sequence = table_kwargs.pop("sequence", ())
-        meta_sequence = ()
-        if hasattr(self.table_class, "Meta") and hasattr(
-            self.table_class.Meta, "sequence"
-        ):
-            meta_sequence = getattr(self.table_class.Meta, "sequence")
-
-        original_sequence = kwarg_sequence or meta_sequence
-
-        # Reconstruct the sequence with the checkbox column at the start
-        return (column_name, *original_sequence)
-
-    def get_table(self, input_name, selected_values):
-        column_name = self.name
-        table_kwargs = self.table_kwargs.copy()
-
-        extra_columns = [
-            (
-                column_name,
-                CheckBoxColumn(
-                    verbose_name="",
-                    input_name=input_name,
-                    helper=self.helper,
-                    selected_values=selected_values,
-                ),
-            )
-        ]
-        extra_columns.extend(table_kwargs.pop("extra_columns", []))
-        sequence = self._construct_sequence(column_name)
-
-        return self.table_class(
-            # This table may never be ordered
-            orderable=False,
-            data=self.prepare_table_data(self.table_data),
-            sequence=sequence,
-            extra_columns=extra_columns,
-            **table_kwargs,
+        self.helper = helper_class(
+            column_name=name,
+            table_class=table_class,
+            table_data=table_data,
+            table_kwargs=table_kwargs
         )
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
@@ -91,6 +37,7 @@ class TableSelect(layout.TemplateNameMixin):
 
         # Waarom hier niet gewoon bound_field.value()
         selected_values = bound_field.field.widget.format_value(bound_field.value())
+
         html_name = bound_field.html_name
-        context.update({"table": self.get_table(html_name, selected_values)})
+        context.update({"table": self.helper.get_table(html_name, selected_values)})
         return render_to_string(template, context.flatten())
