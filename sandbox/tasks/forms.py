@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
-from techonomy.django.django_tableselect import TableSelect
+from techonomy.django.django_tableselect import TableSelect, TableSelectHelper
 
 
 from .tables import TaskTable
@@ -23,12 +23,19 @@ class BulkCompleteTaskForm(forms.Form):
 
     def __init__(self, tasks, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["select_tasks"].choices = self.get_task_choices(tasks)
+
+        table_helper = TableSelectHelper(
+            column_name="select_tasks",
+            table_class=TaskTable,
+            table_data=tasks
+        )
+        self.fields["select_tasks"].choices = table_helper.choices
+
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Field("date_completed"),
-            TableSelect("select_tasks", table_class=TaskTable, table_data=tasks),
+            TableSelect("select_tasks", helper=table_helper),
             Submit("submit", "Submit")
         )
 
@@ -38,6 +45,3 @@ class BulkCompleteTaskForm(forms.Form):
         if date_completed < datetime.date.today():
             raise ValidationError("Date must be in the future")
         return date_completed
-
-    def get_task_choices(self, tasks):
-        return tasks.values_list("id", "name")
