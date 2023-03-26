@@ -1,5 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.query import QuerySet
+from django.forms.widgets import Media
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Table
 
@@ -15,7 +16,18 @@ class TableSelectHelper:
     # Field of the record that holds the name to use in the form checkbox.
     value_name = "name"
 
-    def __init__(self, column_name, table_class, table_data, table_kwargs={}):
+    # Path to javascript static file
+    js_path = "django_tableselect/tableselect.js"
+
+    def __init__(
+        self,
+        column_name,
+        table_class,
+        table_data,
+        table_kwargs={},
+        *,
+        allow_bulk_select=True,
+    ):
         if not issubclass(table_class, Table):
             msg = f"{repr(table_class)} must be a subclass of {repr(Table)}"
             raise ImproperlyConfigured(msg)
@@ -24,6 +36,7 @@ class TableSelectHelper:
         self.table_class = table_class
         self.table_data = table_data
         self.table_kwargs = table_kwargs
+        self.allow_bulk_select = allow_bulk_select
 
     @property
     def choices(self):
@@ -33,6 +46,23 @@ class TableSelectHelper:
         # Default, we assume a list of dictionaries here with
         # 'value_field' and 'value_name' as keys
         return [(x[self.value_field], x[self.value_name]) for x in self.table_data]
+
+    def get_bulk_select_attrs(self, selected_values):
+        """Attributes to add to the bulk select checkbox."""
+
+        if not self.allow_bulk_select:
+            return {}
+
+        attrs = {
+            # Data attribute for javascript to find this element
+            "data-bulk-select": "",
+        }
+
+        if selected_values:
+            if len(selected_values) >= len(self.table_data):
+                # All rows are selected, checkbox should display as checked
+                attrs["checked"] = ""
+        return attrs
 
     def get_accessible_label(self, record):
         """Return the accessible label to associate with the form checkbox.
@@ -101,11 +131,25 @@ class TableSelectHelper:
         extra_columns.extend(table_kwargs.pop("extra_columns", []))
         sequence = self._construct_sequence()
 
+        attrs = table_kwargs.pop("attrs", {})
+
+        # Selector for js initializer
+        attrs["data-tableselect"] = ""
+
         return self.table_class(
             # This table may never be ordered
             orderable=False,
             data=self.prepare_table_data(self.table_data),
             sequence=sequence,
             extra_columns=extra_columns,
+            attrs=attrs,
             **table_kwargs,
         )
+
+    def _get_media(self):
+        media = Media()
+        if self.allow_bulk_select:
+            media = Media(js=[self.js_path])
+        return media
+
+    media = property(_get_media)

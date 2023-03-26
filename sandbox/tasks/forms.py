@@ -7,12 +7,12 @@ from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
 from techonomy.django.django_tableselect import TableSelect, TableSelectHelper
-
+from techonomy.django.django_tableselect.mixins import CrispyMediaMixin
 
 from .tables import TaskTable
 
 
-class BulkCompleteTaskForm(forms.Form):
+class BulkCompleteTaskForm(CrispyMediaMixin, forms.Form):
     date_completed = forms.DateField(
         required=True,
         initial=timezone.now(),
@@ -27,7 +27,8 @@ class BulkCompleteTaskForm(forms.Form):
         table_helper = TableSelectHelper(
             column_name="select_tasks",
             table_class=TaskTable,
-            table_data=tasks
+            table_data=tasks,
+            allow_bulk_select=True,
         )
         self.fields["select_tasks"].choices = table_helper.choices
 
