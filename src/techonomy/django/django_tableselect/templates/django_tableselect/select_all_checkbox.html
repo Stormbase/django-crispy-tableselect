@@ -1,0 +1,9 @@
+{% load crispy_forms_filters i18n %}
+<input
+    data-tableselect-select-all
+    aria-label="{% trans "Select all rows" %}"
+    data-trans-select-all="{% trans "Select all %num% rows" %}"
+    data-trans-deselect-all="{% trans "De-select all %num% rows" %}"
+    type="checkbox"
+    {{ attrs|flatatt }}
+>

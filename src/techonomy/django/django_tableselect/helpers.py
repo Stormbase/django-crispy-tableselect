@@ -47,16 +47,13 @@ class TableSelectHelper:
         # 'value_field' and 'value_name' as keys
         return [(x[self.value_field], x[self.value_name]) for x in self.table_data]
 
-    def get_bulk_select_attrs(self, selected_values):
-        """Attributes to add to the bulk select checkbox."""
+    def get_select_all_checkbox_attrs(self, selected_values):
+        """Attributes to add to the select all checkbox."""
 
         if not self.allow_bulk_select:
             return {}
 
-        attrs = {
-            # Data attribute for javascript to find this element
-            "data-bulk-select": "",
-        }
+        attrs = {}
 
         if selected_values:
             if len(selected_values) >= len(self.table_data):
@@ -147,9 +144,6 @@ class TableSelectHelper:
         )
 
     def _get_media(self):
-        media = Media()
-        if self.allow_bulk_select:
-            media = Media(js=[self.js_path])
-        return media
+        return Media(js=[self.js_path])
 
     media = property(_get_media)
