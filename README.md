@@ -6,7 +6,7 @@
 Form widget for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
 
 <center>
-    <img width="900" src="./docs/images/screenshot.png" alt="Screenshot of a form that allows selecting tasks in a table.">
+    <img width="900" src="./docs/images/demo.gif" alt="Animation showing a table with rows that are selected all at once and then unchecked one-by-one.">
 </center>
 
 ## Todo list
