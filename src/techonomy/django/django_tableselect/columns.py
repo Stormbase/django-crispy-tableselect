@@ -14,7 +14,7 @@ __all__ = [
 
 
 class CheckBoxColumn(BaseCheckBoxColumn):
-    header_template = "django_tableselect/bulk_checkbox.html"
+    header_template = "django_tableselect/checkbox_column_header.html"
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class CheckBoxColumn(BaseCheckBoxColumn):
             **td_input_attrs,
         }
         update_attrs["th__input"] = {
-            **self.helper.get_bulk_select_attrs(selected_values),
+            **self.helper.get_select_all_checkbox_attrs(selected_values),
             **th_input_attrs,
         }
 
@@ -51,14 +51,12 @@ class CheckBoxColumn(BaseCheckBoxColumn):
 
     @property
     def header(self):
-        if not self.helper.allow_bulk_select:
-            # No need to show a checkbox header
-            return ""
-
         default = {"type": "checkbox"}
         general = self.attrs.get("input")
         specific = self.attrs.get("th__input")
         attrs = dict(default, **(specific or general or {}))
 
         template = get_template(self.header_template)
-        return template.render({"attrs": attrs})
+        return template.render(
+            {"attrs": attrs, "enable_select_all": self.helper.allow_bulk_select}
+        )

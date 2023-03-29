@@ -1,9 +1,9 @@
 // TODO: make this code compatible with dinosaurs (old browsers)
 addEventListener("DOMContentLoaded", () => {
   const tableSelector = "[data-tableselect]";
-  const bulkCheckboxSelector = "input[type=checkbox][data-bulk-select]";
+  const selectAllCheckboxSelector = "input[type=checkbox][data-tableselect-select-all]";
   const ariaNarratorSelector = "[data-tableselect-narrator]";
-  const selectCheckboxSelector = "input[type=checkbox][name]";
+  const rowCheckboxSelector = "input[type=checkbox][name]";
 
   const allSelectedTextAttribute = "data-trans-all-selected";
   const selectAllSelectedTextAttribute = "data-trans-select-all";
@@ -17,55 +17,48 @@ addEventListener("DOMContentLoaded", () => {
   const tables = document.querySelectorAll(tableSelector);
 
   tables.forEach((table) => {
-    const bulkCheckbox = table.querySelector(bulkCheckboxSelector);
-    const selectCheckBoxes = table.querySelectorAll(selectCheckboxSelector);
+    const selectAllCheckbox = table.querySelector(selectAllCheckboxSelector);
+    const rowCheckboxes = table.querySelectorAll(rowCheckboxSelector);
     const ariaNarrator = table.querySelector(ariaNarratorSelector);
 
-    let initialized = false;
-
-    // No bulk checkbox = bulk select not enabled.
-    // No point in initializing further.
-    if (!bulkCheckbox) return;
-
     // Get text placeholders from data attributes
-    const selectAllSelectedPlaceholder = bulkCheckbox.getAttribute(
+    const selectAllSelectedPlaceholder = selectAllCheckbox && selectAllCheckbox.getAttribute(
       selectAllSelectedTextAttribute
     );
-    const deselectAllSelectedPlaceholder = bulkCheckbox.getAttribute(
+    const deselectAllSelectedPlaceholder = selectAllCheckbox && selectAllCheckbox.getAttribute(
       deselectAllSelectedTextAttribute
     );
-    const allSelectedPlaceholder = bulkCheckbox.getAttribute(
+    const allSelectedPlaceholder = ariaNarrator.getAttribute(
       allSelectedTextAttribute
     );
-    const numSelectedPlaceholder = bulkCheckbox.getAttribute(
+    const numSelectedPlaceholder = ariaNarrator.getAttribute(
       numSelectedTextAttribute
     );
 
     // Responsible for updating the checked state and accessible label of the checkbox
-    const updateBulkCheckboxState = () => {
-      let checked = partiallyChecked(selectCheckBoxes);
+    const updateSelectAllCheckboxState = () => {
+      if (!selectAllCheckbox) {
+        return;
+      }
 
-      bulkCheckbox.indeterminate =
-        !allChecked(selectCheckBoxes) && partiallyChecked(selectCheckBoxes);
-      bulkCheckbox.checked = checked;
+      let checked = partiallyChecked(rowCheckboxes);
 
-      const totalRows = selectCheckBoxes.length;
+      selectAllCheckbox.indeterminate =
+        !allChecked(rowCheckboxes) && partiallyChecked(rowCheckboxes);
+        selectAllCheckbox.checked = checked;
+
+      const totalRows = rowCheckboxes.length;
 
       if (checked) {
-        bulkCheckbox.ariaLabel = deselectAllSelectedPlaceholder.replace(
+        selectAllCheckbox.ariaLabel = deselectAllSelectedPlaceholder.replace(
           "%num%",
           totalRows
         );
       } else {
-        bulkCheckbox.ariaLabel = selectAllSelectedPlaceholder.replace(
+        selectAllCheckbox.ariaLabel = selectAllSelectedPlaceholder.replace(
           "%num%",
           totalRows
         );
-      }
-
-      // We only want to narrate screenreaders announcements when the page changes, not upon initialization
-      if (initialized) {
-        updateNarrator();
       }
     };
 
@@ -73,15 +66,15 @@ addEventListener("DOMContentLoaded", () => {
     // of giving them more context as to the current state of the table.
     // Example announcement: 10 of 25 selected
     const updateNarrator = () => {
-      const totalRows = selectCheckBoxes.length;
-      const currentRowsSelected = Array.from(selectCheckBoxes).filter(
+      const totalRows = rowCheckboxes.length;
+      const currentRowsSelected = Array.from(rowCheckboxes).filter(
         (box) => box.checked
       ).length;
 
       let text = "";
 
       // All rows are selected
-      if (currentRowsSelected == totalRows) {
+      if (currentRowsSelected === totalRows) {
         text = allSelectedPlaceholder.replace("%total%", totalRows);
       }
       // X out of Y are selected
@@ -96,28 +89,30 @@ addEventListener("DOMContentLoaded", () => {
     };
 
     // Responsible for setting up an event handler to check/uncheck all row checkboxes
-    const initializeBulkCheckbox = () => {
-      bulkCheckbox.addEventListener("change", (event) => {
+    const initializeSelectAllCheckbox = () => {
+      if (!selectAllCheckbox) {
+        return;
+      }
+      selectAllCheckbox.addEventListener("change", (event) => {
         const checked = event.target.checked;
-        selectCheckBoxes.forEach((box) => (box.checked = checked));
-        updateBulkCheckboxState();
+        rowCheckboxes.forEach((box) => (box.checked = checked));
+        updateSelectAllCheckboxState();
       });
     };
 
     // Responsible for setting up an event handler on each row checkbox
     const initializeSelectCheckboxes = () => {
-      selectCheckBoxes.forEach((box) => {
+      rowCheckboxes.forEach((box) => {
         box.addEventListener("change", () => {
-          updateBulkCheckboxState();
+          updateSelectAllCheckboxState();
+          updateNarrator();
         });
       });
     };
 
     // Bring it all to live
-    updateBulkCheckboxState();
-    initializeBulkCheckbox();
+    updateSelectAllCheckboxState();
+    initializeSelectAllCheckbox();
     initializeSelectCheckboxes();
-
-    initialized = true;
   });
 });
