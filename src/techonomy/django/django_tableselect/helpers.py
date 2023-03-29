@@ -26,7 +26,7 @@ class TableSelectHelper:
         table_data,
         table_kwargs={},
         *,
-        allow_bulk_select=True,
+        allow_bulk_select=False,
     ):
         if not issubclass(table_class, Table):
             msg = f"{repr(table_class)} must be a subclass of {repr(Table)}"
@@ -111,6 +111,23 @@ class TableSelectHelper:
         # Reconstruct the sequence with the checkbox column at the start
         return (self.column_name, *original_sequence)
 
+    def get_attrs(self):
+        """Get ``attrs`` keyword arguments to pass to the Table class."""
+
+        table_kwargs = self.table_kwargs.copy()
+        kwarg_attrs = table_kwargs.pop("attrs", {})
+        meta_attrs = ()
+        if hasattr(self.table_class, "Meta") and hasattr(
+            self.table_class.Meta, "attrs"
+        ):
+            meta_attrs = getattr(self.table_class.Meta, "attrs")
+
+        original_attrs = kwarg_attrs or meta_attrs
+        attrs = {"data-tableselect": ""}
+        attrs.update(original_attrs)
+
+        return attrs
+
     def get_table(self, input_name, selected_values):
         table_kwargs = self.table_kwargs.copy()
 
@@ -127,11 +144,7 @@ class TableSelectHelper:
         ]
         extra_columns.extend(table_kwargs.pop("extra_columns", []))
         sequence = self._construct_sequence()
-
-        attrs = table_kwargs.pop("attrs", {})
-
-        # Selector for js initializer
-        attrs["data-tableselect"] = ""
+        attrs = self.get_attrs()
 
         return self.table_class(
             # This table may never be ordered

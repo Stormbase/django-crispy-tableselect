@@ -12,3 +12,6 @@ class TaskTable(tables.Table):
             "name",
             "date_added",
         )
+        attrs = {
+            "class": "my-table",
+        }

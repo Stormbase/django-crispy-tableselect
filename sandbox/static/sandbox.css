@@ -8,7 +8,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     vertical-align: baseline;
 }
 
-table {
+.my-table {
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -48,37 +48,37 @@ input[type='checkbox'] {
     padding: 2rem 0 1rem 0;
 }
 
-table {
+.my-table {
     margin-bottom: 1rem;
 }
 
-thead {
+.my-table thead {
     background: var(--table-header-bg);
 }
 
-th {
+.my-table th {
     vertical-align: bottom;
     color: var(--table-header-color);
     padding: 0.75rem;
     text-align: inherit;
 }
 
-th, th > a {
+.my-table th, th > a {
     text-decoration: none;
 }
 
-th > a:hover {
+.my-table th > a:hover {
     text-decoration: underline;
 }
 
-th.asc, th.desc > a {
+.my-table th.asc, th.desc > a {
     font-weight: bold;
 }
 
-td {
+.my-table td {
     padding: 0.85rem 0.6rem;
 }
 
-tr {
+.my-table tr {
     border-bottom: 1px solid var(--table-border-color);
 }
