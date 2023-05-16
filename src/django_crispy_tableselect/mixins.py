@@ -4,6 +4,7 @@ class CrispyMediaMixin:
     @property
     def media(self):
         media = super().media
+        # FIXME: gather media from nested layout objects too!
         for field in self.helper.layout.fields:
             if hasattr(field, "media"):
                 media += field.media
