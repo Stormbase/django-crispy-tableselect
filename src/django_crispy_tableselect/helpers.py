@@ -111,11 +111,8 @@ class TableSelectHelper:
         # Reconstruct the sequence with the checkbox column at the start
         return (self.column_name, *original_sequence)
 
-    def get_attrs(self):
-        """Get ``attrs`` keyword arguments to pass to the Table class."""
-
-        table_kwargs = self.table_kwargs.copy()
-        kwarg_attrs = table_kwargs.pop("attrs", {})
+    def get_attrs(self, kwarg_attrs):
+        """Get ``attrs`` keyword argument to pass to the table class."""
         meta_attrs = ()
         if hasattr(self.table_class, "Meta") and hasattr(
             self.table_class.Meta, "attrs"
@@ -144,7 +141,7 @@ class TableSelectHelper:
         ]
         extra_columns.extend(table_kwargs.pop("extra_columns", []))
         sequence = self._construct_sequence()
-        attrs = self.get_attrs()
+        attrs = self.get_attrs(table_kwargs.pop("attrs", {}))
 
         return self.table_class(
             # This table may never be ordered
