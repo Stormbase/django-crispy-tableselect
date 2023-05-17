@@ -42,6 +42,7 @@ django-formtools = "^2.4"
 [tool.poetry.group.dev.dependencies]
 crispy-bootstrap5 = "^0.7"
 factory-boy = "^3.2.1"
+beautifulsoup4 = "^4.12.2"
 
 [tool.poetry-dynamic-versioning]
 enable = true

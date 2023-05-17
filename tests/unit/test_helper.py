@@ -22,6 +22,23 @@ def test_select_all_defaults_to_false():
     assert not helper.allow_select_all
 
 
+def test_helper_always_disables_orderable_option():
+    """Check that the helper always returns a table with the orderable option disabled."""
+
+    class OrderableTable(BookTable):
+        class Meta:
+            orderable = True
+
+    helper = TableSelectHelper(
+        "foo", table_class=OrderableTable, table_data=[], label_field="foo"
+    )
+
+    table = helper.get_table("foo", [])
+
+    # Table class enabled ordering, but the helper should have forcefully disabled it
+    assert not table.orderable
+
+
 def test_accessible_label__dictionary(books_tableselect):
     """Check that the default implementation of get_accessible_label includes the value of ``label_field``."""
     helper = books_tableselect(table_data=BOOKS_DICT, label_field="title")
@@ -86,6 +103,34 @@ def test_checkbox_column(books_tableselect):
     assert isinstance(bound_column.column, CheckBoxColumn)
     # Checkbox column is first column in sequence
     assert table.sequence[0] == "selected_books"
+
+
+def test_prepare_table_data__dict(books_tableselect):
+    """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
+
+    data = [{"id": 1, "title": "One"}, {"id": 2, "title": "Two"}]
+    helper = books_tableselect(
+        column_name="foo", table_data=data, value_field="id", label_field="label"
+    )
+    prepared_data = helper.prepare_table_data(data)
+
+    assert len(prepared_data) > 0
+    for row in prepared_data:
+        assert "foo" in row
+        assert row["foo"] in [1, 2]
+
+
+@pytest.mark.django_db
+def test_prepare_table_data__queryset(books_tableselect):
+    """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
+
+    helper = books_tableselect(column_name="foo", value_field="id", label_field="label")
+    prepared_data = helper.prepare_table_data(helper.table_data)
+
+    assert len(prepared_data) > 0
+    for row in prepared_data:
+        assert hasattr(row, "foo")
+        assert getattr(row, "foo") in [x.id for x in helper.table_data]
 
 
 @pytest.mark.django_db
