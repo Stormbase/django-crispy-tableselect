@@ -32,7 +32,7 @@ flake8 = "~4.0"
 flake8-black = "^0.3.5"
 flake8-isort =  "~4.1"
 isort = "~5.10"
-black = "~22"
+black = "~23"
 pytest = "~7"
 pytest-django = "~4.5"
 pytest-cov = "~4.0"
@@ -41,6 +41,7 @@ django-formtools = "^2.4"
 
 [tool.poetry.group.dev.dependencies]
 crispy-bootstrap5 = "^0.7"
+factory-boy = "^3.2.1"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -66,7 +67,7 @@ use_parentheses = true
 
 [tool.pytest.ini_options]
 pythonpath = "sandbox"
-DJANGO_SETTINGS_MODULE = "settings"
+DJANGO_SETTINGS_MODULE = "tests.settings"
 testpaths = "tests/"
 addopts = "--reuse-db --cov=django_crispy_tableselect"
 
