@@ -58,5 +58,5 @@ class CheckBoxColumn(BaseCheckBoxColumn):
 
         template = get_template(self.header_template)
         return template.render(
-            {"attrs": attrs, "enable_select_all": self.helper.allow_bulk_select}
+            {"attrs": attrs, "enable_select_all": self.helper.allow_select_all}
         )

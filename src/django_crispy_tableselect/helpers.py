@@ -10,12 +10,6 @@ from .columns import CheckBoxColumn
 class TableSelectHelper:
     """Helper that houses various features related to TableSelect."""
 
-    # Field of the record that holds the value to use in the form checkbox.
-    value_field = "id"
-
-    # Field of the record that holds the name to use in the form checkbox.
-    value_name = "name"
-
     # Path to javascript static file
     js_path = "django_crispy_tableselect/tableselect.js"
 
@@ -24,9 +18,11 @@ class TableSelectHelper:
         column_name,
         table_class,
         table_data,
-        table_kwargs={},
+        label_field,
+        value_field="id",
         *,
-        allow_bulk_select=False,
+        table_kwargs={},
+        allow_select_all=False,
     ):
         if not issubclass(table_class, Table):
             msg = f"{repr(table_class)} must be a subclass of {repr(Table)}"
@@ -36,7 +32,7 @@ class TableSelectHelper:
         self.table_class = table_class
         self.table_data = table_data
         self.table_kwargs = table_kwargs
-        self.allow_bulk_select = allow_bulk_select
+        self.allow_select_all = allow_select_all
 
     @property
     def choices(self):
@@ -49,8 +45,7 @@ class TableSelectHelper:
 
     def get_select_all_checkbox_attrs(self, selected_values):
         """Attributes to add to the select all checkbox."""
-
-        if not self.allow_bulk_select:
+        if not self.allow_select_all:
             return {}
 
         attrs = {}
@@ -69,9 +64,9 @@ class TableSelectHelper:
         This benefits users of assistive technology like screenreaders."""
 
         if isinstance(record, dict):
-            obj_name = record.get(self.value_name)
+            obj_name = record.get(self.label_field)
         else:
-            obj_name = str(record)
+            obj_name = getattr(record, self.label_field)
 
         return _("Select %(obj_name)s") % {"obj_name": obj_name}
 
