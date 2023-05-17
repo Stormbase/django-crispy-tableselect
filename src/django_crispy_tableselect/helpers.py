@@ -1,5 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models.query import QuerySet
+from django.db import models
 from django.forms.widgets import Media
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Table
@@ -24,6 +24,18 @@ class TableSelectHelper:
         table_kwargs={},
         allow_select_all=False,
     ):
+        """
+        Arguments:
+        - column_name: str -- The name of the form field. The checkbox column is added to the table using this name.
+        - table_class: Table -- Your table class, must inherit from ``django_tables2.Table``.
+        - table_data: QuerySet|Iterable -- Data to use to populate the table. Can be a django QuerySet or an iterable of objects/dictionaries.
+        - label_field: str -- Field (or key in case of dict) to use from table data record to label the checkbox.
+        - value_field: str -- Field (or key in case of dict) to use from table data record as checkbox value. Defaults to 'id'.
+
+        Keyword arguments:
+        - table_kwargs: dict -- Any extra keyword arguments to instantiate the table class with.
+        - allow_select_all: bool -- Whether or not to show a 'select all' checkbox in the column header. Defaults to False.
+        """
         if not issubclass(table_class, Table):
             msg = f"{repr(table_class)} must be a subclass of {repr(Table)}"
             raise ImproperlyConfigured(msg)
@@ -31,17 +43,17 @@ class TableSelectHelper:
         self.column_name = column_name
         self.table_class = table_class
         self.table_data = table_data
+        self.label_field = label_field
+        self.value_field = value_field
         self.table_kwargs = table_kwargs
         self.allow_select_all = allow_select_all
 
     @property
     def choices(self):
-        if isinstance(self.table_data, QuerySet):
-            return self.table_data.values_list(self.value_field, self.value_name)
+        if isinstance(self.table_data, models.query.QuerySet):
+            return self.table_data.values_list(self.value_field, self.label_field)
 
-        # Default, we assume a list of dictionaries here with
-        # 'value_field' and 'value_name' as keys
-        return [(x[self.value_field], x[self.value_name]) for x in self.table_data]
+        return [(x[self.value_field], x[self.label_field]) for x in self.table_data]
 
     def get_select_all_checkbox_attrs(self, selected_values):
         """Attributes to add to the select all checkbox."""
@@ -59,8 +71,7 @@ class TableSelectHelper:
     def get_accessible_label(self, record):
         """Return the accessible label to associate with the form checkbox.
 
-        Defaults to `str(record)` for objects, or the value of a key self.value_name for dictionaries.
-
+        Uses the value specified by ``label_field`` as key for dictionaries or as attribute for objects.
         This benefits users of assistive technology like screenreaders."""
 
         if isinstance(record, dict):
@@ -93,6 +104,7 @@ class TableSelectHelper:
         return table_data
 
     def _construct_sequence(self):
+        """Reconstructs the ``sequence`` argument for the table with the checkbox column in front."""
         table_kwargs = self.table_kwargs.copy()
         kwarg_sequence = table_kwargs.pop("sequence", ())
         meta_sequence = ()
@@ -121,8 +133,8 @@ class TableSelectHelper:
         return attrs
 
     def get_table(self, input_name, selected_values):
+        """Return instance of the table class with checkbox column."""
         table_kwargs = self.table_kwargs.copy()
-
         extra_columns = [
             (
                 self.column_name,
@@ -139,7 +151,8 @@ class TableSelectHelper:
         attrs = self.get_attrs(table_kwargs.pop("attrs", {}))
 
         return self.table_class(
-            # This table may never be ordered
+            # This table may never be ordered.
+            # We cannot guarantee ordering to work properly while still remembering what checkboxes are checked.
             orderable=False,
             data=self.prepare_table_data(self.table_data),
             sequence=sequence,
