@@ -11,17 +11,6 @@ addEventListener("DOMContentLoaded", () => {
   const deselectAllSelectedTextAttribute = "data-trans-deselect-all";
   const numSelectedTextAttribute = "data-trans-num-selected";
 
-  let shiftPressed = false;
-  let lastChangedCheckbox = null;
-
-  document.addEventListener("keydown", (event) => {
-    shiftPressed = event.shiftKey;
-  });
-
-  document.addEventListener("keyup", (event) => {
-    shiftPressed = event.shiftKey;
-  });
-
   /** Checks if nodes are checked. */
   const allChecked = (nodes) => Array.from(nodes).every((node) => node.checked);
   /** Checks if at least one node is checked. */
@@ -48,6 +37,17 @@ addEventListener("DOMContentLoaded", () => {
     const numSelectedPlaceholder = ariaNarrator.getAttribute(
       numSelectedTextAttribute
     );
+
+    let shiftPressed = false;
+    let lastChangedCheckbox = null;
+
+    document.addEventListener("keydown", (event) => {
+      shiftPressed = event.shiftKey;
+    });
+
+    document.addEventListener("keyup", (event) => {
+      shiftPressed = event.shiftKey;
+    });
 
     // Responsible for updating the checked state and accessible label of the checkbox
     const updateSelectAllCheckboxState = () => {
@@ -107,6 +107,10 @@ addEventListener("DOMContentLoaded", () => {
      * Used to implement the 'shift' select multiple pattern.
      */
     const updateAffectedCheckboxes = (currentCheckbox) => {
+      if (!lastChangedCheckbox) {
+        return;
+      }
+
       const nodes = Array.from(rowCheckboxes);
       const targetIndex = nodes.findIndex((el) => el === currentCheckbox);
       const lastChangedIndex = nodes.findIndex(
