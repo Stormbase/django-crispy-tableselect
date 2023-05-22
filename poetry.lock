@@ -202,18 +202,18 @@ django = ">=3.2"
 
 [[package]]
 name = "django-formtools"
-version = "2.4"
+version = "2.4.1"
 description = "A set of high-level abstractions for Django forms"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "django-formtools-2.4.tar.gz", hash = "sha256:deb932be55b1d9419e37dc4d65dfbfeb8d307b71c8c11fd52f159aba5fc0deed"},
-    {file = "django_formtools-2.4-py3-none-any.whl", hash = "sha256:f5f32f62ec8192cd1bc55bd929ca7dff5a5f2addf9027db95a5906ecfaa64836"},
+    {file = "django-formtools-2.4.1.tar.gz", hash = "sha256:21f8d5dac737f1e636fa8a0a10969c1c32f525a6dfa27c29592827ba70d9643a"},
+    {file = "django_formtools-2.4.1-py3-none-any.whl", hash = "sha256:49ea8a64ddef4728a558bf5f8f622c0f4053b979edcf193bf00dd80432ab2f12"},
 ]
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 
 [[package]]
 name = "django-tables2"
