@@ -1,3 +1,4 @@
+"use strict";
 // TODO: make this code compatible with dinosaurs (old browsers)
 addEventListener("DOMContentLoaded", () => {
   const tableSelector = "[data-tableselect]";
@@ -10,7 +11,20 @@ addEventListener("DOMContentLoaded", () => {
   const deselectAllSelectedTextAttribute = "data-trans-deselect-all";
   const numSelectedTextAttribute = "data-trans-num-selected";
 
+  let shiftPressed = false;
+  let lastChangedCheckbox = null;
+
+  document.addEventListener("keydown", (event) => {
+    shiftPressed = event.shiftKey;
+  });
+
+  document.addEventListener("keyup", (event) => {
+    shiftPressed = event.shiftKey;
+  });
+
+  /** Checks if nodes are checked. */
   const allChecked = (nodes) => Array.from(nodes).every((node) => node.checked);
+  /** Checks if at least one node is checked. */
   const partiallyChecked = (nodes) =>
     Array.from(nodes).some((node) => node.checked);
 
@@ -22,12 +36,12 @@ addEventListener("DOMContentLoaded", () => {
     const ariaNarrator = table.querySelector(ariaNarratorSelector);
 
     // Get text placeholders from data attributes
-    const selectAllSelectedPlaceholder = selectAllCheckbox && selectAllCheckbox.getAttribute(
-      selectAllSelectedTextAttribute
-    );
-    const deselectAllSelectedPlaceholder = selectAllCheckbox && selectAllCheckbox.getAttribute(
-      deselectAllSelectedTextAttribute
-    );
+    const selectAllSelectedPlaceholder =
+      selectAllCheckbox &&
+      selectAllCheckbox.getAttribute(selectAllSelectedTextAttribute);
+    const deselectAllSelectedPlaceholder =
+      selectAllCheckbox &&
+      selectAllCheckbox.getAttribute(deselectAllSelectedTextAttribute);
     const allSelectedPlaceholder = ariaNarrator.getAttribute(
       allSelectedTextAttribute
     );
@@ -45,7 +59,7 @@ addEventListener("DOMContentLoaded", () => {
 
       selectAllCheckbox.indeterminate =
         !allChecked(rowCheckboxes) && partiallyChecked(rowCheckboxes);
-        selectAllCheckbox.checked = checked;
+      selectAllCheckbox.checked = checked;
 
       const totalRows = rowCheckboxes.length;
 
@@ -88,12 +102,40 @@ addEventListener("DOMContentLoaded", () => {
       ariaNarrator.textContent = text;
     };
 
+    /**
+     * Updates the checked state of all checkboxes between the last changed checkbox and the given checkbox.
+     * Used to implement the 'shift' select multiple pattern.
+     */
+    const updateAffectedCheckboxes = (currentCheckbox) => {
+      const nodes = Array.from(rowCheckboxes);
+      const targetIndex = nodes.findIndex((el) => el === currentCheckbox);
+      const lastChangedIndex = nodes.findIndex(
+        (el) => el === lastChangedCheckbox
+      );
+
+      const startIndex = Math.min(targetIndex, lastChangedIndex);
+      const endIndex = Math.max(targetIndex, lastChangedIndex);
+      const affectedCheckboxes = nodes.filter(
+        (el, index) => startIndex <= index && index <= endIndex
+      );
+
+      // Update all affected checkboxes checked state.
+      affectedCheckboxes.forEach(
+        (el) => (el.checked = currentCheckbox.checked)
+      );
+      // Responsibility for updating the select all checkbox and narrator is delegated to
+      // the `change` event handler of the currentCheckbox (see `initializeSelectCheckboxes` function).
+    };
+
     // Responsible for setting up an event handler to check/uncheck all row checkboxes
     const initializeSelectAllCheckbox = () => {
       if (!selectAllCheckbox) {
         return;
       }
       selectAllCheckbox.addEventListener("change", (event) => {
+        // Clear the last changed checkbox.
+        lastChangedCheckbox = null;
+
         const checked = event.target.checked;
         rowCheckboxes.forEach((box) => (box.checked = checked));
         updateSelectAllCheckboxState();
@@ -103,7 +145,13 @@ addEventListener("DOMContentLoaded", () => {
     // Responsible for setting up an event handler on each row checkbox
     const initializeSelectCheckboxes = () => {
       rowCheckboxes.forEach((box) => {
-        box.addEventListener("change", () => {
+        box.addEventListener("change", (event) => {
+          // If shift was pressed during the change, all checkboxes between this checkbox
+          // and ``lastChangedCheckbox`` are affected as well.
+          if (shiftPressed) {
+            updateAffectedCheckboxes(event.target);
+          }
+          lastChangedCheckbox = event.target;
           updateSelectAllCheckboxState();
           updateNarrator();
         });
