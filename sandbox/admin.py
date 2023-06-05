@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tasks.models import Task
+from sandbox.models import Task
 
 
 class TaskAdmin(admin.ModelAdmin):

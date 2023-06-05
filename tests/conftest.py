@@ -1,8 +1,7 @@
 import pytest
 
 from django_crispy_tableselect import TableSelectHelper
-
-from .testapp import factories, models, tables
+from sandbox import factories, models, tables
 
 
 @pytest.fixture

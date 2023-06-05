@@ -4,15 +4,16 @@ from django.views.generic.list import MultipleObjectMixin
 from django.http import HttpResponseRedirect
 
 from formtools.wizard.views import SessionWizardView
-from tasks.models import Task
-from tasks.tables import TaskTable
-from tasks.forms import BulkCompleteTaskForm
+from sandbox.models import Task
+from sandbox.tables import TaskTable
+from sandbox.forms import BulkCompleteTaskForm
 
 
 class TaskTableView(SingleTableView):
     model = Task
     table_class = TaskTable
     template_name = "task_table_page.html"
+
 
 class BulkCompleteTaskView(MultipleObjectMixin, SessionWizardView):
     form_list = [
