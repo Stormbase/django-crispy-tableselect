@@ -17,7 +17,7 @@ lint:
 	flake8 src tests
 
 test:
-	pytest --reuse-db --cov=django_crispy_tableselect
+	pytest --reuse-db
 
 cov:
 	pytest --reuse-db --cov=django_crispy_tableselect --cov-report=html
