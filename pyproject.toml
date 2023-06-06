@@ -22,7 +22,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.8,<4"
 Django = ">=3.2,<5.0"
 django-tables2 = ">=2.4,<3"
 django-crispy-forms = ">=2.0,<3.0"

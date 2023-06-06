@@ -9,7 +9,10 @@
 __pycache__/
 *.egg-info/
 *.pyc
-.coverage
+.coverage*
+
+# Tox
+.tox/
 
 # Virtual env
 venv/
