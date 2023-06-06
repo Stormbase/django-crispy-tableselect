@@ -15,7 +15,13 @@ def author_factory():
 
 
 @pytest.fixture
-def books_tableselect(book_factory):
+def books_tableselecthelper(book_factory):
+    """Return an instance of TableSelectHelper that is operating on a collection of 10 books.
+
+    Accepts an `table_data` argument to pass your own data.
+    All other kwargs are passed as-is to TableSelectHelper.__init__()
+    """
+
     def inner_func(**extra_args):
         qs = models.Book.objects.none()
         if "table_data" not in extra_args:
