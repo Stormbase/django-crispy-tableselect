@@ -1,6 +1,6 @@
 [
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 1,
     "fields": {
       "name": "Water plants",
@@ -9,7 +9,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 2,
     "fields": {
       "name": "Feed Koi fish",
@@ -18,7 +18,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 3,
     "fields": {
       "name": "Sweep terrace",
@@ -27,7 +27,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 4,
     "fields": {
       "name": "Make coffee",
@@ -36,7 +36,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 5,
     "fields": {
       "name": "Wash curtains",
@@ -45,7 +45,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 6,
     "fields": {
       "name": "Meditate",
@@ -54,7 +54,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 7,
     "fields": {
       "name": "Stargaze until dawn",
@@ -63,7 +63,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 8,
     "fields": {
       "name": "Read a chapter in Moby Dick",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 9,
     "fields": {
       "name": "Catch a fish",
@@ -81,7 +81,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 11,
     "fields": {
       "name": "Play Mahjong",
@@ -90,7 +90,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 12,
     "fields": {
       "name": "Read a bedtime story",
@@ -99,7 +99,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 13,
     "fields": {
       "name": "Watch Die Hard 2",
@@ -108,7 +108,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 14,
     "fields": {
       "name": "Do 10 push-ups",
@@ -117,7 +117,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 15,
     "fields": {
       "name": "Play 18 holes golf",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 16,
     "fields": {
       "name": "Cycle to the super market",
@@ -135,7 +135,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 17,
     "fields": {
       "name": "Drop of the kids at school",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "model": "tasks.task",
+    "model": "sandbox.task",
     "pk": 18,
     "fields": {
       "name": "Take the dog to the vet",

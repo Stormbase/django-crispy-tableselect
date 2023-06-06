@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from tasks.models import Task
+from sandbox.models import Task, Book
 
 
 class TaskTable(tables.Table):
@@ -15,3 +15,9 @@ class TaskTable(tables.Table):
         attrs = {
             "class": "my-table",
         }
+
+
+class BookTable(tables.Table):
+    class Meta:
+        model = Book
+        fields = ("title", "author", "date_published")

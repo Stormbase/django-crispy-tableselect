@@ -32,7 +32,7 @@ flake8 = "~4.0"
 flake8-black = "^0.3.5"
 flake8-isort =  "~4.1"
 isort = "~5.10"
-black = "~22"
+black = "~23"
 pytest = "~7"
 pytest-django = "~4.5"
 pytest-cov = "~4.0"
@@ -41,6 +41,8 @@ django-formtools = "^2.4"
 
 [tool.poetry.group.dev.dependencies]
 crispy-bootstrap5 = "^0.7"
+factory-boy = "^3.2.1"
+beautifulsoup4 = "^4.12.2"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -75,3 +77,26 @@ omit = ["**/migrations/**", "**/tests/**", "sandbox/**"]
 
 [tool.coverage.report]
 show_missing = true
+ignore_errors = true
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc.)?abstractmethod",
+
+    # Nor complain about type checking
+    "if TYPE_CHECKING:",
+]

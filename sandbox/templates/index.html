@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block back_link %}{% endblock %}
+
+{% block content %}
+<h1>django-crispy-tableselect sandbox</h1>
+<p>Welcome to the django-crispy-tableselect development sandbox!</p>
+
+<h2>Tasks</h2>
+<ul>
+    <li><a href="{% url 'tasks:table' %}">Tasks table</a></li>
+    <li><a href="{% url 'tasks:bulk-complete' %}">Tasks bulk complete</a></li>
+</ul>
+{% endblock content %}

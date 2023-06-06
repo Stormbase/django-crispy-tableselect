@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'sandbox.css' %}">
 </head>
 <body>
+    {% block back_link %} <a href="{% url 'index' %}">Back to index</a>{% endblock back_link %}
     {% block content %}{% endblock content %}
 </body>
 </html>
