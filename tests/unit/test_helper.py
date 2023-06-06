@@ -5,8 +5,8 @@ from django.core import exceptions
 
 from django_crispy_tableselect import TableSelectHelper
 from django_crispy_tableselect.columns import CheckBoxColumn
-from tests.testapp.models import Book
-from tests.testapp.tables import BookTable
+from sandbox.models import Book
+from sandbox.tables import BookTable
 
 BOOKS_DICT = [
     {"title": "Sans Famille", "id": 123, "author": "Hector Malot"},
@@ -15,7 +15,7 @@ BOOKS_DICT = [
 
 
 def test_select_all_defaults_to_false():
-    """Check that - when not specified -the ``allow_select_all`` option defaults to False."""
+    """Check that - when not specified - the ``allow_select_all`` option defaults to False."""
     helper = TableSelectHelper(
         "foo", table_class=BookTable, table_data=[], label_field="foo"
     )
@@ -39,21 +39,21 @@ def test_helper_always_disables_orderable_option():
     assert not table.orderable
 
 
-def test_accessible_label__dictionary(books_tableselect):
+def test_accessible_label__dictionary(books_tableselecthelper):
     """Check that the default implementation of get_accessible_label includes the value of ``label_field``."""
-    helper = books_tableselect(table_data=BOOKS_DICT, label_field="title")
+    helper = books_tableselecthelper(table_data=BOOKS_DICT, label_field="title")
 
     assert BOOKS_DICT[0]["title"] in helper.get_accessible_label(BOOKS_DICT[0])
     assert BOOKS_DICT[1]["title"] in helper.get_accessible_label(BOOKS_DICT[1])
 
 
 @pytest.mark.django_db
-def test_accessible_label__queryset(books_tableselect, book_factory):
+def test_accessible_label__queryset(books_tableselecthelper, book_factory):
     """Check that the default implementation of get_accessible_label includes the value of ."""
     book = book_factory(title="The Witches by Roahl Dahl")
     qs = Book.objects.all()
 
-    helper = books_tableselect(table_data=qs)
+    helper = books_tableselecthelper(table_data=qs)
     assert str(book) in helper.get_accessible_label(book)
 
 
@@ -92,9 +92,9 @@ def test_media():
 
 
 @pytest.mark.django_db
-def test_checkbox_column(books_tableselect):
+def test_checkbox_column(books_tableselecthelper):
     """Check that the checkbox column is added and added at the start of the table."""
-    helper = books_tableselect()
+    helper = books_tableselecthelper()
 
     table = helper.get_table("foo", [])
     # Checkbox column is present
@@ -105,11 +105,11 @@ def test_checkbox_column(books_tableselect):
     assert table.sequence[0] == "selected_books"
 
 
-def test_prepare_table_data__dict(books_tableselect):
+def test_prepare_table_data__dict(books_tableselecthelper):
     """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
 
     data = [{"id": 1, "title": "One"}, {"id": 2, "title": "Two"}]
-    helper = books_tableselect(
+    helper = books_tableselecthelper(
         column_name="foo", table_data=data, value_field="id", label_field="label"
     )
     prepared_data = helper.prepare_table_data(data)
@@ -121,10 +121,12 @@ def test_prepare_table_data__dict(books_tableselect):
 
 
 @pytest.mark.django_db
-def test_prepare_table_data__queryset(books_tableselect):
+def test_prepare_table_data__queryset(books_tableselecthelper):
     """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
 
-    helper = books_tableselect(column_name="foo", value_field="id", label_field="label")
+    helper = books_tableselecthelper(
+        column_name="foo", value_field="id", label_field="label"
+    )
     prepared_data = helper.prepare_table_data(helper.table_data)
 
     assert len(prepared_data) > 0
@@ -134,9 +136,9 @@ def test_prepare_table_data__queryset(books_tableselect):
 
 
 @pytest.mark.django_db
-def test_choices__queryset(books_tableselect):
+def test_choices__queryset(books_tableselecthelper):
     """Check that the helper generates the expected choices tuple in the right order when given a QuerySet."""
-    helper = books_tableselect()
+    helper = books_tableselecthelper()
 
     assert len(helper.choices) == len(
         helper.table_data
@@ -150,9 +152,9 @@ def test_choices__queryset(books_tableselect):
         assert choices[idx][1] == book.title
 
 
-def test_choices__dictionaries(books_tableselect):
+def test_choices__dictionaries(books_tableselecthelper):
     """Check that the helper generates the expected choices tuple in the right order when given a dictionary."""
-    helper = books_tableselect(table_data=BOOKS_DICT)
+    helper = books_tableselecthelper(table_data=BOOKS_DICT)
 
     assert len(helper.choices) == len(
         helper.table_data
@@ -166,9 +168,9 @@ def test_choices__dictionaries(books_tableselect):
         assert choices[idx][1] == book["title"]
 
 
-def test_get_table_extra_columns_respected(books_tableselect):
+def test_get_table_extra_columns_respected(books_tableselecthelper):
     """Check that the get_table method respects the extra_columns argument."""
-    helper = books_tableselect(
+    helper = books_tableselecthelper(
         table_data=BOOKS_DICT,
         table_kwargs={"extra_columns": [("date_created", tables.DateColumn())]},
     )
@@ -179,9 +181,9 @@ def test_get_table_extra_columns_respected(books_tableselect):
     assert "date_created" not in table.base_columns
 
 
-def test_get_table_kwarg_attrs_respected(books_tableselect):
+def test_get_table_kwarg_attrs_respected(books_tableselecthelper):
     """Check that the get_table method respects the ``attrs`` key passed to table_kwargs."""
-    helper = books_tableselect(
+    helper = books_tableselecthelper(
         table_data=BOOKS_DICT,
         table_kwargs={"attrs": {"needle": ""}},
     )
@@ -190,14 +192,14 @@ def test_get_table_kwarg_attrs_respected(books_tableselect):
     assert "needle" in table.attrs
 
 
-def test_get_table_meta_attrs_respected(books_tableselect):
+def test_get_table_meta_attrs_respected(books_tableselecthelper):
     """Check that the get_table method respects the attrs Meta attribute."""
 
     class BookTableWithAttrs(BookTable):
         class Meta:
             attrs = {"needle": ""}
 
-    helper = books_tableselect(
+    helper = books_tableselecthelper(
         table_class=BookTableWithAttrs,
         table_data=BOOKS_DICT,
     )
@@ -206,9 +208,9 @@ def test_get_table_meta_attrs_respected(books_tableselect):
     assert "needle" in table.attrs
 
 
-def test_get_table__no_rows_selected(books_tableselect):
+def test_get_table__no_rows_selected(books_tableselecthelper):
     """Check that the get_table method returns a table with no checkboxes selected by default."""
-    helper = books_tableselect(table_data=BOOKS_DICT)
+    helper = books_tableselecthelper(table_data=BOOKS_DICT)
 
     table = helper.get_table(input_name="foo", selected_values=[])
 
@@ -219,9 +221,9 @@ def test_get_table__no_rows_selected(books_tableselect):
         assert "checked" not in cell_html
 
 
-def test_get_table__single_row_checked(books_tableselect):
+def test_get_table__single_row_checked(books_tableselecthelper):
     """Check that the get_table method returns a table with the right rows checked when ``selected_values`` is set."""
-    helper = books_tableselect(table_data=BOOKS_DICT)
+    helper = books_tableselecthelper(table_data=BOOKS_DICT)
 
     # Select the first row
     selected_values = [str(BOOKS_DICT[0]["id"])]
@@ -274,16 +276,16 @@ def test_table_class_kwarg_sequence_respected():
     "selected_values,expect_checked", [([], False), (["1"], False), (["1", "2"], True)]
 )
 def test_table_select_all_checkbox_attrs(
-    books_tableselect, selected_values, expect_checked
+    books_tableselecthelper, selected_values, expect_checked
 ):
     """Check that the select_all_checkbox_attrs method only returns 'checked' when all rows are selected."""
 
     data = [{"id": 1, "title": "ABC"}, {"id": 2, "title": "DEF"}]
-    helper = books_tableselect(table_data=data, allow_select_all=False)
+    helper = books_tableselecthelper(table_data=data, allow_select_all=False)
     # Never return attributes when allow_select_all is False
     helper.get_select_all_checkbox_attrs(selected_values) == {}
 
-    helper = books_tableselect(table_data=data, allow_select_all=True)
+    helper = books_tableselecthelper(table_data=data, allow_select_all=True)
     attrs = helper.get_select_all_checkbox_attrs(selected_values)
 
     # Checked attribute should only be present when we expect it
