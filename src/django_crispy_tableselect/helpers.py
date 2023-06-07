@@ -18,7 +18,7 @@ class TableSelectHelper:
         column_name,
         table_class,
         table_data,
-        label_field,
+        label,
         value_field="id",
         *,
         table_kwargs={},
@@ -29,7 +29,7 @@ class TableSelectHelper:
         - column_name: str -- The name of the form field. The checkbox column is added to the table using this name.
         - table_class: Table -- Your table class, must inherit from ``django_tables2.Table``.
         - table_data: QuerySet|Iterable -- Data to use to populate the table. Can be a django QuerySet or an iterable of objects/dictionaries.
-        - label_field: str -- Field (or key in case of dict) to use from table data record to label the checkbox.
+        - label: str | callable -- Field (or key in case of dict) to use from table data record to label the checkbox. If callable, it receives the object / dict and should return a string to label to checkbox with.
         - value_field: str -- Field (or key in case of dict) to use from table data record as checkbox value. Defaults to 'id'.
 
         Keyword arguments:
@@ -43,17 +43,23 @@ class TableSelectHelper:
         self.column_name = column_name
         self.table_class = table_class
         self.table_data = table_data
-        self.label_field = label_field
+        self.label = label
         self.value_field = value_field
         self.table_kwargs = table_kwargs
         self.allow_select_all = allow_select_all
 
     @property
     def choices(self):
-        if isinstance(self.table_data, models.query.QuerySet):
-            return self.table_data.values_list(self.value_field, self.label_field)
+        if callable(self.label):
+            return [(x[self.value_field], self.label(x)) for x in self.table_data]
 
-        return [(x[self.value_field], x[self.label_field]) for x in self.table_data]
+        if (
+            isinstance(self.table_data, models.query.QuerySet)
+            and type(self.label) == str
+        ):
+            return self.table_data.values_list(self.value_field, self.label)
+
+        return [(x[self.value_field], x[self.label]) for x in self.table_data]
 
     def get_select_all_checkbox_attrs(self, selected_values):
         """Attributes to add to the select all checkbox."""
@@ -71,13 +77,13 @@ class TableSelectHelper:
     def get_accessible_label(self, record):
         """Return the accessible label to associate with the form checkbox.
 
-        Uses the value specified by ``label_field`` as key for dictionaries or as attribute for objects.
+        Uses the value specified by ``label`` as key for dictionaries or as attribute for objects.
         This benefits users of assistive technology like screenreaders."""
 
         if isinstance(record, dict):
-            obj_name = record.get(self.label_field)
+            obj_name = record.get(self.label)
         else:
-            obj_name = getattr(record, self.label_field)
+            obj_name = getattr(record, self.label)
 
         return _("Select %(obj_name)s") % {"obj_name": obj_name}
 

@@ -16,9 +16,7 @@ BOOKS_DICT = [
 
 def test_select_all_defaults_to_false():
     """Check that - when not specified - the ``allow_select_all`` option defaults to False."""
-    helper = TableSelectHelper(
-        "foo", table_class=BookTable, table_data=[], label_field="foo"
-    )
+    helper = TableSelectHelper("foo", table_class=BookTable, table_data=[], label="foo")
     assert not helper.allow_select_all
 
 
@@ -30,7 +28,7 @@ def test_helper_always_disables_orderable_option():
             orderable = True
 
     helper = TableSelectHelper(
-        "foo", table_class=OrderableTable, table_data=[], label_field="foo"
+        "foo", table_class=OrderableTable, table_data=[], label="foo"
     )
 
     table = helper.get_table("foo", [])
@@ -39,9 +37,31 @@ def test_helper_always_disables_orderable_option():
     assert not table.orderable
 
 
+@pytest.mark.django_db
+def test_accessible_label__callable_str(books_tableselecthelper, book_factory):
+    """Check that the default implementation of get_accessible_label includes the value of ``label``."""
+    helper = books_tableselecthelper(table_data=BOOKS_DICT, label=str)
+    book = book_factory(title="The Witches by Roahl Dahl")
+    qs = Book.objects.all()
+
+    helper = books_tableselecthelper(table_data=qs)
+    assert str(book) in helper.get_accessible_label(book)
+
+
+@pytest.mark.django_db
+def test_accessible_label__callable_lambda(books_tableselecthelper, book_factory):
+    """Check that the default implementation of get_accessible_label includes the value of ``label``."""
+    helper = books_tableselecthelper(table_data=BOOKS_DICT, label=lambda x: x.title)
+    book = book_factory(title="The Witches by Roahl Dahl")
+    qs = Book.objects.all()
+
+    helper = books_tableselecthelper(table_data=qs)
+    assert book.title in helper.get_accessible_label(book)
+
+
 def test_accessible_label__dictionary(books_tableselecthelper):
-    """Check that the default implementation of get_accessible_label includes the value of ``label_field``."""
-    helper = books_tableselecthelper(table_data=BOOKS_DICT, label_field="title")
+    """Check that the default implementation of get_accessible_label includes the value of ``label``."""
+    helper = books_tableselecthelper(table_data=BOOKS_DICT, label="title")
 
     assert BOOKS_DICT[0]["title"] in helper.get_accessible_label(BOOKS_DICT[0])
     assert BOOKS_DICT[1]["title"] in helper.get_accessible_label(BOOKS_DICT[1])
@@ -71,19 +91,17 @@ def test_table_class_derived_from_table():
             "foo",
             table_class=NotDerivedFromTableClass,
             table_data=[],
-            label_field="foo",
+            label="foo",
         )
 
     TableSelectHelper(
-        "foo", table_class=DerivedFromTableClass, table_data=[], label_field="foo"
+        "foo", table_class=DerivedFromTableClass, table_data=[], label="foo"
     )
 
 
 def test_media():
     """Check that the media attribute is present on the helper and that it contains a valid reference to a javascript file."""
-    helper = TableSelectHelper(
-        "foo", table_class=BookTable, table_data=[], label_field="foo"
-    )
+    helper = TableSelectHelper("foo", table_class=BookTable, table_data=[], label="foo")
     assert helper.media
     assert helper.media._js
 
@@ -110,7 +128,7 @@ def test_prepare_table_data__dict(books_tableselecthelper):
 
     data = [{"id": 1, "title": "One"}, {"id": 2, "title": "Two"}]
     helper = books_tableselecthelper(
-        column_name="foo", table_data=data, value_field="id", label_field="label"
+        column_name="foo", table_data=data, value_field="id", label="label"
     )
     prepared_data = helper.prepare_table_data(data)
 
@@ -124,9 +142,7 @@ def test_prepare_table_data__dict(books_tableselecthelper):
 def test_prepare_table_data__queryset(books_tableselecthelper):
     """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
 
-    helper = books_tableselecthelper(
-        column_name="foo", value_field="id", label_field="label"
-    )
+    helper = books_tableselecthelper(column_name="foo", value_field="id", label="label")
     prepared_data = helper.prepare_table_data(helper.table_data)
 
     assert len(prepared_data) > 0
@@ -252,7 +268,7 @@ def test_table_class_meta_sequence_respected():
         column_name="selected_books",
         table_class=SequencedBookTable,
         table_data=[],
-        label_field="title",
+        label="title",
     )
 
     assert expected_sequence == helper._construct_sequence()
@@ -265,7 +281,7 @@ def test_table_class_kwarg_sequence_respected():
         column_name="selected_books",
         table_class=BookTable,
         table_data=[],
-        label_field="title",
+        label="title",
         table_kwargs={"sequence": ("author", "...")},
     )
 
