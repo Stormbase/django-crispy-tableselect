@@ -29,7 +29,7 @@ jobs:
            python-version: '${{ matrix.python-version }}'
       - name: Install python dependencies
         run: |
-          pip install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
+          pip install poetry
           make install
       - name: Install matrix specific dependencies
         run: |

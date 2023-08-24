@@ -27,7 +27,7 @@ Crispy layout object for selecting rows in a [django-tables2](https://github.com
 ```bash
 pyenv virtualenv 3.9 django-tableselect  # or your alternative to create a venv
 pyenv activate django-tableselect
-pip install -r https://raw.githubusercontent.com/techonomydev/github-workflows/master/bootstrap-requirements.txt
+pip install poetry
 make install
 
 # Optional, when you're not creating the virtualenv yourself poetry will do it for you.
