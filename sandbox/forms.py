@@ -1,7 +1,7 @@
 import datetime
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, Layout, Submit
+from crispy_forms.layout import Column, Field, Layout, Row, Submit
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -31,7 +31,13 @@ class BulkCompleteTaskForm(CrispyMediaMixin, forms.Form):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout(
-            Field("date_completed"), TableSelect("select_tasks", helper=table_helper), Submit("submit", "Submit")
+            Row(
+                Column(
+                    Field("date_completed"),
+                    TableSelect("select_tasks", helper=table_helper),
+                ),
+                Submit("submit", "Submit"),
+            )
         )
 
     def clean_date_completed(self):
