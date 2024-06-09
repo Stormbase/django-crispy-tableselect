@@ -2,7 +2,7 @@
 .idea/
 .vscode/
 
-# OSX
+# macOS
 .DS_Store
 
 # Python
@@ -10,6 +10,9 @@ __pycache__/
 *.egg-info/
 *.pyc
 .coverage
+
+# Build
+dist/
 
 # Virtual env
 venv/
