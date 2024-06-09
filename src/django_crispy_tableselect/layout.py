@@ -35,11 +35,5 @@ class TableSelect(layout.TemplateNameMixin):
         selected_values = self.format_value(bound_field.value())
 
         html_name = bound_field.html_name
-        context.update(
-            {
-                "table": self.helper.get_table(
-                    input_name=html_name, selected_values=selected_values
-                )
-            }
-        )
+        context.update({"table": self.helper.get_table(input_name=html_name, selected_values=selected_values)})
         return render_to_string(template, context.flatten())

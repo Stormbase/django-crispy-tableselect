@@ -1,13 +1,12 @@
 import datetime
 
-from django import forms
-from django.utils import timezone
-from django.core.exceptions import ValidationError
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Submit
-from django_crispy_tableselect import TableSelect, TableSelectHelper, CrispyMediaMixin
+from crispy_forms.layout import Field, Layout, Submit
+from django import forms
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
+from django_crispy_tableselect import CrispyMediaMixin, TableSelect, TableSelectHelper
 
 from .tables import TaskTable
 
@@ -17,7 +16,7 @@ class BulkCompleteTaskForm(CrispyMediaMixin, forms.Form):
         required=True,
         initial=timezone.now(),
         help_text="Must be a date in the future",
-        widget=forms.widgets.SelectDateWidget()
+        widget=forms.widgets.SelectDateWidget(),
     )
     select_tasks = forms.fields.MultipleChoiceField(required=True)
 
@@ -25,20 +24,14 @@ class BulkCompleteTaskForm(CrispyMediaMixin, forms.Form):
         super().__init__(*args, **kwargs)
 
         table_helper = TableSelectHelper(
-            column_name="select_tasks",
-            table_class=TaskTable,
-            table_data=tasks,
-            allow_select_all=True,
-            label="name"
+            column_name="select_tasks", table_class=TaskTable, table_data=tasks, allow_select_all=True, label="name"
         )
         self.fields["select_tasks"].choices = table_helper.choices
 
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout(
-            Field("date_completed"),
-            TableSelect("select_tasks", helper=table_helper),
-            Submit("submit", "Submit")
+            Field("date_completed"), TableSelect("select_tasks", helper=table_helper), Submit("submit", "Submit")
         )
 
     def clean_date_completed(self):

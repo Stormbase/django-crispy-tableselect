@@ -53,10 +53,7 @@ class TableSelectHelper:
         if callable(self.label):
             return [(x[self.value_field], self.label(x)) for x in self.table_data]
 
-        if (
-            isinstance(self.table_data, models.query.QuerySet)
-            and type(self.label) == str
-        ):
+        if isinstance(self.table_data, models.query.QuerySet) and isinstance(self.label, str):
             return self.table_data.values_list(self.value_field, self.label)
 
         return [(x[self.value_field], x[self.label]) for x in self.table_data]
@@ -114,9 +111,7 @@ class TableSelectHelper:
         table_kwargs = self.table_kwargs.copy()
         kwarg_sequence = table_kwargs.pop("sequence", ())
         meta_sequence = ()
-        if hasattr(self.table_class, "Meta") and hasattr(
-            self.table_class.Meta, "sequence"
-        ):
+        if hasattr(self.table_class, "Meta") and hasattr(self.table_class.Meta, "sequence"):
             meta_sequence = getattr(self.table_class.Meta, "sequence")
 
         original_sequence = kwarg_sequence or meta_sequence
@@ -127,9 +122,7 @@ class TableSelectHelper:
     def get_attrs(self, kwarg_attrs):
         """Get ``attrs`` keyword argument to pass to the table class."""
         meta_attrs = ()
-        if hasattr(self.table_class, "Meta") and hasattr(
-            self.table_class.Meta, "attrs"
-        ):
+        if hasattr(self.table_class, "Meta") and hasattr(self.table_class.Meta, "attrs"):
             meta_attrs = getattr(self.table_class.Meta, "attrs")
 
         original_attrs = kwarg_attrs or meta_attrs

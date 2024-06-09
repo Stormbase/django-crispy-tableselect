@@ -6,7 +6,13 @@ from django.views.generic import TemplateView
 
 from sandbox import views
 
-tasks_urls = ([path("table/", views.TaskTableView.as_view(), name="table"), path("bulk/", views.BulkCompleteTaskView.as_view(), name="bulk-complete")], "tasks")
+tasks_urls = (
+    [
+        path("table/", views.TaskTableView.as_view(), name="table"),
+        path("bulk/", views.BulkCompleteTaskView.as_view(), name="bulk-complete"),
+    ],
+    "tasks",
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

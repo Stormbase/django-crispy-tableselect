@@ -1,5 +1,6 @@
 import django_tables2 as tables
-from sandbox.models import Task, Book
+
+from sandbox.models import Book, Task
 
 
 class TaskTable(tables.Table):
