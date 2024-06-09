@@ -1,64 +1,112 @@
-[tool.poetry]
-name = "django-crispy-tableselect"
-version = "0.1.0"
-description = "Crispy layout object for selecting rows in a table"
-authors = ["Storm Heg <storm@stormbase.digital>"]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/technonomydev/django-tableselect"
-classifiers = [
-    "Environment :: Web Environment",
-    "Framework :: Django",
-    "Framework :: Django :: 3.2",
-    "Framework :: Django :: 4.1",
-    "Framework :: Django :: 4.2",
-    "License :: Other/Proprietary License",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-]
-packages = [
-    { include = "django_crispy_tableselect", from = "src" },
-]
-
-[tool.poetry.dependencies]
-python = "^3.9"
-Django = ">=3.2,<5.0"
-django-tables2 = ">=2.4,<3"
-django-crispy-forms = ">=2.0,<3.0"
-
-[tool.poetry.dev-dependencies]
-flake8 = "~4.0"
-flake8-black = "^0.3.5"
-flake8-isort =  "~4.1"
-isort = "~5.10"
-black = "~23"
-pytest = "~7"
-pytest-django = "~4.5"
-pytest-cov = "~4.0"
-pytest-env = "^0.6.2"
-django-formtools = "^2.4"
-
-[tool.poetry.group.dev.dependencies]
-crispy-bootstrap5 = "^0.7"
-factory-boy = "^3.2.1"
-beautifulsoup4 = "^4.12.2"
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.black]
-line-length = 88
---extend-exclude= "/migrations/"
+[project]
+name = "django-crispy-tableselect"
+dynamic = ["version"]
+readme = "README.md"
+description = "Crispy layout object for selecting rows in a table"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = ["django", "crispy-forms"]
+authors = [{ name = "Storm B. Heg", email = "storm@stormbase.digital" }]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+]
+dependencies = [
+  "django>=4.2",
+  "django-tables2>=2.4,<3",
+  "django-crispy-forms>=2.0,<3.0"
+]
+
+[project.urls]
+# TODO: documentation link
+# Documentation = "https://github.com/Stormbase/django-crispy-tableselect/"
+Changelog = "https://github.com/Stormbase/django-crispy-tableselect/blob/main/CHANGELOG.md"
+Issues = "https://github.com/Stormbase/django-crispy-tableselect/issues"
+Source = "https://github.com/Stormbase/django-crispy-tableselect"
+
+[tool.hatch.version]
+path = "src/django_crispy_tableselect/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+artifacts = [
+  # Include built static files that are gitignored and thus not included by default
+  "src/django_crispy_tableselect/static/django_crispy_tableselect/*",
+  # Include compiled translations that are gitignored and thus not included by default
+  "src/django_crispy_tableselect/locale/*/LC_MESSAGES/*.mo",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "django-debug-toolbar>4,<5",
+  "dj-database-url>=2.1.0,<3",
+  "psycopg>=2.9",
+  "crispy-bootstrap5>=2024.2,<2025",
+  "factory-boy>=3.2,<4",
+  # To test functionality with a strict Content Security Policy
+  "django-csp>=3.8",
+  # To test behaviour as part or a multi-step form
+  "django-formtools>=2.4",
+
+  # Update as necessary, prevent sudden breakage
+  "pytest>8,<9",
+  "pytest-django>4.5,<5",
+  "pytest-cov>=5,<6",
+  "pytest-env>=0.6.2,<1",
+  "pytest-randomly>=3.15,<4",
+  "beautifulsoup4>=4.12,<5",
+]
+
+[tool.hatch.envs.hatch-static-analysis]
+dependencies = [
+  # Update as necessary, prevent sudden breakage
+  "ruff>0.4,<0.5",
+  "isort>5,<6",
+]
+
+[tool.ruff]
+target-version = "py39" # minimum target version
+
+[tool.ruff.lint]
+# E501: Line too long
+ignore = ["E501"]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "T20", # flake8-print
+    "BLE", # flake8-blind-except
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
 
 [tool.isort]
 force_grid_wrap = 0
 include_trailing_comma = true
 line_length = 88
-skip = "migrations"
 multi_line_output = 3
 use_parentheses = true
+
+[tool.coverage.run]
+source_pkgs = ["django_crispy_tableselect", "tests"]
+branch = true
+parallel = true
+omit = []
 
 [tool.pytest.ini_options]
 pythonpath = "sandbox"
@@ -66,12 +114,8 @@ DJANGO_SETTINGS_MODULE = "settings"
 testpaths = "tests/"
 addopts = "--reuse-db --cov=django_crispy_tableselect"
 
-[tool.coverage.run]
-omit = ["**/migrations/**", "**/tests/**", "sandbox/**"]
-
 [tool.coverage.report]
 show_missing = true
-ignore_errors = true
 exclude_lines = [
     # Have to re-enable the standard pragma
     "pragma: no cover",
