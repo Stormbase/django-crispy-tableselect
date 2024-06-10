@@ -12,8 +12,8 @@ Crispy layout object for selecting rows in a [django-tables2](https://github.com
 ## Todo list
 
 - [ ] Write documentation (d'oh)
-- [ ] Publish to PyPI
-- [ ] Add checkbox in table header to select/de-select all rows at once.
+- [x] ~~Publish to PyPI~~
+- [x] ~~Add checkbox in table header to select/de-select all rows at once.~~
 - [ ] Add tests
 - [ ] Audit accessibility
 
