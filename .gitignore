@@ -22,3 +22,6 @@ venv/
 
 # Sandbox files
 db.sqlite3
+
+# Compiled translations
+*.mo
