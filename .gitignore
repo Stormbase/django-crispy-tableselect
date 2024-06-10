@@ -10,6 +10,9 @@ __pycache__/
 *.egg-info/
 *.pyc
 .coverage
+coverage.*
+htmlcov/
+.tox/
 
 # Build
 dist/
