@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 from django.views.generic.list import MultipleObjectMixin
 from django_tables2 import SingleTableView
 from formtools.wizard.views import SessionWizardView
@@ -15,10 +16,36 @@ class TaskTableView(SingleTableView):
     template_name = "task_table_page.html"
 
 
-class BulkCompleteTaskView(MultipleObjectMixin, SessionWizardView):
-    form_list = [("tasks", BulkCompleteTaskForm)]
+class BulkCompleteTaskView(MultipleObjectMixin, FormView):
+    form_class = BulkCompleteTaskForm
     model = Task
     template_name = "task_bulk_complete_page.html"
+    success_url = reverse_lazy("tasks:bulk-complete")
+
+    def get_form_kwargs(self, step=None):
+        kwargs = super().get_form_kwargs()
+        kwargs["tasks"] = self.get_queryset()
+
+        return kwargs
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        task_ids = data.get("select_tasks")
+        date_completed = data.get("date_completed")
+
+        Task.objects.filter(id__in=task_ids).update(date_completed=date_completed)
+
+        return HttpResponseRedirect(reverse_lazy("tasks:bulk-complete"))
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class BulkCompleteTaskWizardView(MultipleObjectMixin, SessionWizardView):
+    form_list = [("tasks", BulkCompleteTaskForm)]
+    model = Task
+    template_name = "task_bulk_complete_wizard_page.html"
     success_url = reverse_lazy("tasks:bulk-complete")
 
     def get_form_kwargs(self, step=None):

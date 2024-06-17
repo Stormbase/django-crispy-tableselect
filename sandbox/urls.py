@@ -10,6 +10,7 @@ tasks_urls = (
     [
         path("table/", views.TaskTableView.as_view(), name="table"),
         path("bulk/", views.BulkCompleteTaskView.as_view(), name="bulk-complete"),
+        path("bulk/wizard/", views.BulkCompleteTaskWizardView.as_view(), name="bulk-complete-wizard"),
     ],
     "tasks",
 )

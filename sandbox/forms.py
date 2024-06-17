@@ -24,7 +24,11 @@ class BulkCompleteTaskForm(CrispyMediaMixin, forms.Form):
         super().__init__(*args, **kwargs)
 
         table_helper = TableSelectHelper(
-            column_name="select_tasks", table_class=TaskTable, table_data=tasks, allow_select_all=True, label="name"
+            column_name="select_tasks",
+            table_class=TaskTable,
+            table_data=tasks,
+            allow_select_all=True,
+            label_field="name",
         )
         self.fields["select_tasks"].choices = table_helper.choices
 

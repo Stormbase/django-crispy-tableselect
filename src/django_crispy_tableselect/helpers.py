@@ -1,4 +1,3 @@
-import warnings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.forms.widgets import Media
