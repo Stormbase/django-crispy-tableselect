@@ -13,6 +13,7 @@ addEventListener("DOMContentLoaded", () => {
 
   /** Checks if nodes are checked. */
   const allChecked = (nodes) => Array.from(nodes).every((node) => node.checked);
+
   /** Checks if at least one node is checked. */
   const partiallyChecked = (nodes) =>
     Array.from(nodes).some((node) => node.checked);
@@ -162,7 +163,7 @@ addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    // Bring it all to live
+    // Bring it all to life
     updateSelectAllCheckboxState();
     initializeSelectAllCheckbox();
     initializeSelectCheckboxes();
