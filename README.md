@@ -1,6 +1,7 @@
 # Django Crispy TableSelect
 
-[![CI](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml/badge.svg)](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml)
+[![CI](https://github.com/Stormbase/django-crispy-tableselect/actions/workflows/test.yml/badge.svg)](https://github.com/Stormbase/django-crispy-tableselect/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/Stormbase/django-crispy-tableselect/graph/badge.svg?token=D2SFHA4QEL)](https://codecov.io/gh/Stormbase/django-crispy-tableselect)
 
 _Note:_ this package is under heavy development and currently in proof-of-concept phase.
 
