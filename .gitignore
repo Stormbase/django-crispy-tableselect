@@ -17,6 +17,12 @@ htmlcov/
 # Build
 dist/
 
+# Coverage
+.coverage.*
+.coverage
+htmlcov/
+coverage.xml
+
 # Virtual env
 venv/
 

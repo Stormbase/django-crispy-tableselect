@@ -20,7 +20,8 @@ test:
 	pytest --reuse-db
 
 cov:
-	pytest --reuse-db --cov=django_crispy_tableselect --cov-report=html
+	coverage run -pm pytest --reuse-db
+	coverage html
 
 format:
 	black src tests
