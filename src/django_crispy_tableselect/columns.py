@@ -34,7 +34,9 @@ class CheckBoxColumn(BaseCheckBoxColumn):
         th_input_attrs = attrs.get("th__input", {})
         update_attrs["td__input"] = {
             "name": input_name,
-            "aria-label": lambda **kwargs: helper.get_accessible_label(kwargs.get("record")),
+            "aria-label": lambda **kwargs: helper.get_accessible_label(
+                kwargs.get("record")
+            ),
             **td_input_attrs,
         }
         update_attrs["th__input"] = {
@@ -55,4 +57,6 @@ class CheckBoxColumn(BaseCheckBoxColumn):
         attrs = dict(default, **(specific or general or {}))
 
         template = get_template(self.header_template)
-        return template.render({"attrs": attrs, "enable_select_all": self.helper.allow_select_all})
+        return template.render(
+            {"attrs": attrs, "enable_select_all": self.helper.allow_select_all}
+        )

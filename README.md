@@ -1,7 +1,8 @@
 # Django Crispy TableSelect
+
 [![CI](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml/badge.svg)](https://github.com/techonomydev/django-tableselect/actions/workflows/ci.yml)
 
-*Note:* this package is under heavy development and currently in proof-of-concept phase.
+_Note:_ this package is under heavy development and currently in proof-of-concept phase.
 
 Crispy layout object for selecting rows in a [django-tables2](https://github.com/jieter/django-tables2/) data table.
 
@@ -20,10 +21,11 @@ Crispy layout object for selecting rows in a [django-tables2](https://github.com
 ## Development setup
 
 ### Requirements
+
 - At least python 3.9 (pyenv managed recommended)
 
-
 ### Install the django app with poetry
+
 ```bash
 pyenv virtualenv 3.9 django-tableselect  # or your alternative to create a venv
 pyenv activate django-tableselect
@@ -35,37 +37,38 @@ make install
 source $(poetry env info --path)/bin/activate
 ```
 
-### Linting
-`flake8-black` and `flake8-isort` are installed and configured
-```bash
-make lint
-```
+### Linting and formatting
 
-### Formatting
-`black` and `isort` are configured
+Ruff is configured. Run it with
+
 ```bash
 make format
 ```
 
-
 ### Test
+
 Pytest with coverage is default enabled
+
 ```bash
 make test
 ```
 
 ### Run the django development server (sandbox)
+
 First run the migrations:
+
 ```bash
 make migrate
 ```
 
 Now create a superuser:
+
 ```bash
 sandbox/manage.py createsuperuser
 ```
 
 Finally run the django dev server:
+
 ```bash
 sandbox/manage.py runserver
 ```

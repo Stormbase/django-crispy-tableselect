@@ -16,7 +16,9 @@ BOOKS_DICT = [
 
 def test_select_all_defaults_to_false():
     """Check that - when not specified - the ``allow_select_all`` option defaults to False."""
-    helper = TableSelectHelper("foo", table_class=BookTable, table_data=[], label_field="foo")
+    helper = TableSelectHelper(
+        "foo", table_class=BookTable, table_data=[], label_field="foo"
+    )
     assert not helper.allow_select_all
 
 
@@ -27,7 +29,9 @@ def test_helper_always_disables_orderable_option():
         class Meta:
             orderable = True
 
-    helper = TableSelectHelper("foo", table_class=OrderableTable, table_data=[], label_field="foo")
+    helper = TableSelectHelper(
+        "foo", table_class=OrderableTable, table_data=[], label_field="foo"
+    )
 
     table = helper.get_table("foo", [])
 
@@ -49,7 +53,9 @@ def test_accessible_label__callable_str(books_tableselecthelper, book_factory):
 @pytest.mark.django_db
 def test_accessible_label__callable_lambda(books_tableselecthelper, book_factory):
     """Check that the default implementation of get_accessible_label includes the value of ``label_field``."""
-    helper = books_tableselecthelper(table_data=BOOKS_DICT, label_field=lambda x: x.title)
+    helper = books_tableselecthelper(
+        table_data=BOOKS_DICT, label_field=lambda x: x.title
+    )
     book = book_factory(title="The Witches by Roahl Dahl")
     qs = Book.objects.all()
 
@@ -92,12 +98,16 @@ def test_table_class_derived_from_table():
             label_field="foo",
         )
 
-    TableSelectHelper("foo", table_class=DerivedFromTableClass, table_data=[], label_field="foo")
+    TableSelectHelper(
+        "foo", table_class=DerivedFromTableClass, table_data=[], label_field="foo"
+    )
 
 
 def test_media():
     """Check that the media attribute is present on the helper and that it contains a valid reference to a javascript file."""
-    helper = TableSelectHelper("foo", table_class=BookTable, table_data=[], label_field="foo")
+    helper = TableSelectHelper(
+        "foo", table_class=BookTable, table_data=[], label_field="foo"
+    )
     assert helper.media
     assert helper.media._js
 
@@ -123,7 +133,9 @@ def test_prepare_table_data__dict(books_tableselecthelper):
     """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
 
     data = [{"id": 1, "title": "One"}, {"id": 2, "title": "Two"}]
-    helper = books_tableselecthelper(column_name="foo", table_data=data, value_field="id", label_field="label")
+    helper = books_tableselecthelper(
+        column_name="foo", table_data=data, value_field="id", label_field="label"
+    )
     prepared_data = helper.prepare_table_data(data)
 
     assert len(prepared_data) > 0
@@ -136,7 +148,9 @@ def test_prepare_table_data__dict(books_tableselecthelper):
 def test_prepare_table_data__queryset(books_tableselecthelper):
     """Check that the helper prepares the table data with values necessary for the checkbox column to function."""
 
-    helper = books_tableselecthelper(column_name="foo", value_field="id", label_field="label")
+    helper = books_tableselecthelper(
+        column_name="foo", value_field="id", label_field="label"
+    )
     prepared_data = helper.prepare_table_data(helper.table_data)
 
     assert len(prepared_data) > 0
@@ -150,7 +164,9 @@ def test_choices__queryset(books_tableselecthelper):
     """Check that the helper generates the expected choices tuple in the right order when given a QuerySet."""
     helper = books_tableselecthelper()
 
-    assert len(helper.choices) == len(helper.table_data), "No all table data presented as choices"
+    assert len(helper.choices) == len(helper.table_data), (
+        "No all table data presented as choices"
+    )
 
     choices = helper.choices
 
@@ -164,7 +180,9 @@ def test_choices__dictionaries(books_tableselecthelper):
     """Check that the helper generates the expected choices tuple in the right order when given a dictionary."""
     helper = books_tableselecthelper(table_data=BOOKS_DICT)
 
-    assert len(helper.choices) == len(helper.table_data), "No all table data presented as choices"
+    assert len(helper.choices) == len(helper.table_data), (
+        "No all table data presented as choices"
+    )
 
     choices = helper.choices
 
@@ -278,8 +296,12 @@ def test_table_class_kwarg_sequence_respected():
     assert expected_sequence == helper._construct_sequence()
 
 
-@pytest.mark.parametrize("selected_values,expect_checked", [([], False), (["1"], False), (["1", "2"], True)])
-def test_table_select_all_checkbox_attrs(books_tableselecthelper, selected_values, expect_checked):
+@pytest.mark.parametrize(
+    "selected_values,expect_checked", [([], False), (["1"], False), (["1", "2"], True)]
+)
+def test_table_select_all_checkbox_attrs(
+    books_tableselecthelper, selected_values, expect_checked
+):
     """Check that the select_all_checkbox_attrs method only returns 'checked' when all rows are selected."""
 
     data = [{"id": 1, "title": "ABC"}, {"id": 2, "title": "DEF"}]

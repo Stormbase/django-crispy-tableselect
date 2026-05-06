@@ -13,9 +13,6 @@ install:
 migrate:
 	sandbox/manage.py migrate
 
-lint:
-	flake8 src tests
-
 test:
 	pytest --reuse-db
 
@@ -24,5 +21,5 @@ cov:
 	coverage html
 
 format:
-	black src tests
-	isort src tests
+	ruff check src tests --fix
+	ruff format src tests
