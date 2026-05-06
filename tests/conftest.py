@@ -32,7 +32,7 @@ def books_tableselecthelper(book_factory):
             "column_name": "selected_books",
             "table_class": tables.BookTable,
             "table_data": extra_args.pop("table_data", qs),
-            "label": "title",
+            "label_field": "title",
             **extra_args,
         }
         return TableSelectHelper(**kwargs)
