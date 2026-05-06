@@ -14,13 +14,14 @@ jobs:
   linting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
+        persist-credentials: false
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
-        python-version: 3.12
+        python-version: 3.14
     
     - name: Install hatch
       run: pip install hatch
@@ -34,25 +35,26 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python: ["3.9", "3.10", "3.11", "3.12"]
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         experimental: [false]
         toxenv: ["py"]
         include:
           # Test against future django-crispy-forms. Allowed to fail.
-          - python: "3.12"
+          - python: "3.14"
             toxenv: crispymain
             experimental: true
           # Test against future django-tables2. Allowed to fail.
-          - python: "3.12"
+          - python: "3.14"
             toxenv: tables2main
             experimental: true
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
            python-version: '${{ matrix.python }}'
 

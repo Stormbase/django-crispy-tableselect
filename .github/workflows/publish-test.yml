@@ -12,11 +12,11 @@ jobs:
     needs: ['test']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.14
 
       - name: Install Hatch
         run: pip install hatch
@@ -24,7 +24,7 @@ jobs:
       - name: Build package distributions
         run: hatch build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           path: ./dist
 
@@ -39,7 +39,9 @@ jobs:
       # Mandatory for trusted publishing
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
+        with:
+          name: dist
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
