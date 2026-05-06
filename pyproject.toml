@@ -32,6 +32,29 @@ dependencies = [
   "django-tables2>=2.4",
   "django-crispy-forms>=2.0"
 ]
+optional-dependencies.testing = [
+  "django-debug-toolbar>6,<7",
+  "dj-database-url>=2.1.0,<3",
+  "psycopg>=3.0,<4",
+  "crispy-bootstrap5>=2024.2",
+  "factory-boy>=3.2,<4",
+  # To test functionality with a strict Content Security Policy
+  "django-csp>=3.8",
+  # To test behaviour as part or a multi-step form
+  "django-formtools>=2.4",
+
+  # Update as necessary, prevent sudden breakage
+  "tox>=4.14,<5",
+  "coverage>=7.2,<8",
+  "pytest>9,<10",
+  "pytest-django>4.5,<5",
+  "pytest-env>=0.6.2,<1",
+  "pytest-randomly>=3.15,<4",
+  "beautifulsoup4>=4.12,<5",
+
+  # Update as necessary, prevent sudden breakage
+  "ruff>0.15,<0.16",
+]
 
 [project.urls]
 # TODO: documentation link
@@ -53,30 +76,12 @@ artifacts = [
 
 [tool.hatch.envs.default]
 dependencies = [
-  "django-debug-toolbar>6,<7",
-  "dj-database-url>=2.1.0,<3",
-  "psycopg>=3.0,<4",
-  "crispy-bootstrap5>=2024.2",
-  "factory-boy>=3.2,<4",
-  # To test functionality with a strict Content Security Policy
-  "django-csp>=3.8",
-  # To test behaviour as part or a multi-step form
-  "django-formtools>=2.4",
-
-  # Update as necessary, prevent sudden breakage
-  "tox>=4.14,<5",
-  "coverage>=7.2,<8",
-  "pytest>9,<10",
-  "pytest-django>4.5,<5",
-  "pytest-env>=0.6.2,<1",
-  "pytest-randomly>=3.15,<4",
-  "beautifulsoup4>=4.12,<5",
+  "django-crispy-tableselect[testing]",
 ]
 
 [tool.hatch.envs.hatch-static-analysis]
 dependencies = [
-  # Update as necessary, prevent sudden breakage
-  "ruff>0.15,<0.16",
+  "django-crispy-tableselect[testing]",
 ]
 
 [tool.ruff]
