@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_call:  # Allow this workflow to be called by other workflows, e.g. publish.yml
 
 jobs:
   linting:
