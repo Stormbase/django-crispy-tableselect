@@ -21,5 +21,5 @@ cov:
 	coverage html
 
 format:
-	ruff check src tests --fix
-	ruff format src tests
+	ruff check src tests sandbox --fix
+	ruff format src tests sandbox

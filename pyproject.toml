@@ -80,9 +80,9 @@ dependencies = [
 ]
 
 [tool.hatch.envs.hatch-static-analysis]
-dependencies = [
-  "django-crispy-tableselect[testing]",
-]
+# Do not use Hatch default configuration
+config-path = "pyproject.toml"
+dependencies = [  ]
 
 [tool.ruff]
 target-version = "py310" # minimum target version
