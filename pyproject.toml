@@ -110,10 +110,9 @@ multi_line_output = 3
 use_parentheses = true
 
 [tool.coverage.run]
-source_pkgs = ["django_crispy_tableselect", "tests"]
+source_pkgs = ["django_crispy_tableselect",]
 branch = true
-parallel = true
-omit = []
+omit = [ "*/migrations/*", "*/tests/*" ]
 
 [tool.pytest.ini_options]
 pythonpath = "sandbox"
